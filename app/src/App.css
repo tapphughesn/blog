@@ -5,6 +5,14 @@
   text-align: center;
 }
 
+.main-subheading {
+  padding-top: 1px;
+}
+
+.main-paragraph {
+  text-indent: 2em;
+}
+
 /* #region Navigation */
 
 .nav {
@@ -20,12 +28,13 @@
 .nav--scrolled {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(6px);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Layout */
 .nav__container {
-  max-width: 72rem; /* ~6xl */
+  max-width: 72rem;
+  /* ~6xl */
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -40,6 +49,18 @@
   .nav__container {
     padding: 0 2rem;
   }
+}
+
+.nav__logo {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #111827;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav__logo:hover {
+  color: #2563eb;
 }
 
 .nav__content {
@@ -149,19 +170,22 @@
   color: #2563eb;
   background: #eff6ff;
 }
+
 /* #endregion */
 
 /* #region TwoPane */
 
-
 .two-pane {
   display: flex;
-  flex-direction: column; /* mobile first: stack */
-  height: calc(100vh - 6rem);
+  flex-direction: column;
+  /* mobile first: stacked */
   gap: 1rem;
+  margin-top: 2rem;
+  /* space for fixed navbar */
+  min-height: calc(100vh - 4rem);
 }
 
-/* On wider screens, switch to side-by-side layout */
+/* Side-by-side on wider screens */
 @media (min-width: 768px) {
   .two-pane {
     flex-direction: row;
@@ -169,32 +193,35 @@
   }
 }
 
-/* Shared styles for both panes */
+/* Shared pane styles */
 .pane {
   padding: 1rem;
 }
 
 /* Left pane */
 .left {
-  flex: 0 0 280px; /* fixed width */
+  flex: 0 0 280px;
+  /* fixed width */
 }
 
 .left-portrait {
   width: 100%;
-  object-fit: contain; 
+  object-fit: contain;
   padding-top: 1em;
 }
 
 @media (min-width: 768px) {
   .left {
     position: sticky;
-    top: 1rem; /* distance from top of viewport */
+    top: 4rem;
+    /* same as navbar height */
     align-self: flex-start;
     justify-content: flex-start;
+    width: 280px;
     height: 100%;
-    width: 250px;
 
-    border-right: 1px solid #e5e7eb; /* subtle grey */
+    border-right: 1px solid #e5e7eb;
+    /* subtle grey */
     padding-right: 2rem;
     padding-left: 0;
   }
@@ -203,9 +230,17 @@
 /* Right pane */
 .right {
   flex: 1;
-  overflow: auto; /* scrolls when tall */
-  max-height: calc(100vh - 6rem); /* keep within viewport */
+  padding-top: 1rem;
 }
+
+.right p {
+  text-align: left;
+}
+
+.right> :first-child {
+  margin-top: 0;
+}
+
 /* #endregion */
 
 /* #region Contact */
@@ -223,7 +258,8 @@
   padding-top: 1rem;
   margin-top: 2rem;
   color: #111827;
-  border-top: 1px solid #e5e7eb; /* subtle grey */
+  border-top: 1px solid #e5e7eb;
+  /* subtle grey */
 }
 
 .contact-section__item {
@@ -243,14 +279,15 @@
 }
 
 .contact-section__link:hover {
-  color: #2563eb; /* subtle blue hover */
+  color: #2563eb;
+  /* subtle blue hover */
   transform: translateY(-2px);
 }
 
 .contact-icon {
   width: 20px;
   height: 20px;
-  vertical-align: bottom; 
+  vertical-align: bottom;
   padding-right: 5px;
 }
 
@@ -260,7 +297,7 @@
 }
 
 .email-text {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 /* #endregion */

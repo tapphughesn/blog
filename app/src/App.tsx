@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X} from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import "./App.css"
 import githubUrl from './icons/github.svg';
 import linkedinUrl from './icons/linkedin.svg';
@@ -10,37 +10,46 @@ function App() {
   return (
     <main className="main-content">
 
-      <Navigation/>
+      <Navigation />
 
       <div className="two-pane">
-      <aside className="pane left">
-        <img 
-          src="/front_portrait_downscaled.jpg" 
-          alt="Headshot picture of Nick Tapp-Hughes" 
-          className="left-portrait"
+        <aside className="pane left">
+          <img
+            src="/front_portrait_downscaled.jpg"
+            alt="Headshot picture of Nick Tapp-Hughes"
+            className="left-portrait"
           />
-          <Contact/>
-      </aside>
-      <main className="pane right">
-        <h1>
-        Nick Tapp-Hughes
-        </h1>
-        <p>
-          This is the scrollable content area. Add more text here to see the
-          scrolling effect.
-        </p>
-        {[...Array(20)].map((_, i) => (
-          <p key={i}>Paragraph {i + 1}: Lorem ipsum dolor sit amet...Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>
-        ))}
-      </main>
-    </div>
+          <Contact />
+        </aside>
+        <RightContent />
+      </div>
     </main>
   );
 }
 export default App;
 
+const RightContent = () => {
+  return (
+    <div className="pane right">
+      <h1 className="main-subheading">
+        Who I Am
+      </h1>
+      <p className="main-paragraph">
+        I'm a software developer and researcher with 4 years of experience, specializing in developing high-quality customer-facing software, building and deploying AI/ML models, and analyzing big data.
+        Until I find my next full-time role, I'll be travelling Europe and the US, building this website, publishing scientific journal articles, writing technical blog posts, and dabbling in entrepreneurship.
+      </p>
+      <h1 className="main-subheading">
+        Experience
+      </h1>
+      <p className="main-paragraph">
+        blah blah
+      </p>
+    </div>
+  )
+}
+
 const Contact = () => {
-  return(
+  return (
     <section id="contact" className="contact-section">
 
       <h2 className="contact-section__header">Contact</h2>
@@ -62,7 +71,7 @@ const Contact = () => {
         >
           <span>GitHub</span>
         </a>
-        <span className = "separator">|</span>
+        <span className="separator">|</span>
         <img src={linkedinUrl} alt="LinkedIn Icon" className="contact-icon" />
         <a
           href="https://www.linkedin.com/in/nicholas-tapp-hughes-b75641142/"
@@ -100,15 +109,22 @@ const Navigation = () => {
   // Navigation items
   const navItems = [
     { name: 'About', href: '#about' },
-    { name: 'CV', href: '#cv' },
     { name: 'Blog', href: '#blog' },
-    { name: 'Contact', href: '#contact' }
+    { name: 'CV', href: '#cv' },
+    { name: 'Publications', href: '#publications' },
   ];
 
   return (
     <nav className={`nav ${isScrolled ? "nav--scrolled" : ""}`}>
       <div className="nav__container">
         <div className="nav__content">
+
+          {/* Upper Left Corner Name */}
+          <div className="nav__brand">
+            <a href="#home" className="nav__logo" onClick={closeMobileMenu}>
+              Nick Tapp-Hughes
+            </a>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="nav__links--desktop">
