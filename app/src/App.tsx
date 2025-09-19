@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Menu, X} from 'lucide-react';
 import "./App.css"
-
+import githubUrl from './icons/github.svg';
+import linkedinUrl from './icons/linkedin.svg';
+import emailUrl from './icons/email.svg';
 
 function App() {
 
@@ -15,17 +17,14 @@ function App() {
         <img 
           src="/front_portrait_downscaled.jpg" 
           alt="Headshot picture of Nick Tapp-Hughes" 
+          className="left-portrait"
           />
-          <div>
-            <p>
-              Contact me at nicholas (dot) tapphughes (at) gmail (dot) com
-            </p>
-          </div>
+          <Contact/>
       </aside>
       <main className="pane right">
-        <h2>
-          Nick Tapp-Hughes's Personal Website!
-        </h2>
+        <h1>
+        Nick Tapp-Hughes
+        </h1>
         <p>
           This is the scrollable content area. Add more text here to see the
           scrolling effect.
@@ -39,6 +38,45 @@ function App() {
   );
 }
 export default App;
+
+const Contact = () => {
+  return(
+    <section id="contact" className="contact-section">
+
+      <h2 className="contact-section__header">Contact</h2>
+
+      <div className="contact-section__item">
+        <img src={emailUrl} alt="Email Icon" className="contact-icon" />
+        <span className="email-text">
+          nicholas(dot)tapphughes(at)gmail(dot)com
+        </span>
+      </div>
+
+      <div className="contact-section__item">
+        <img src={githubUrl} alt="GitHub" className="contact-icon" />
+        <a
+          href="https://github.com/tapphughesn"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="contact-section__link"
+        >
+          <span>GitHub</span>
+        </a>
+        <span className = "separator">|</span>
+        <img src={linkedinUrl} alt="LinkedIn Icon" className="contact-icon" />
+        <a
+          href="https://www.linkedin.com/in/nicholas-tapp-hughes-b75641142/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="contact-section__link"
+        >
+          <span>LinkedIn</span>
+        </a>
+      </div>
+
+    </section>
+  );
+}
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
