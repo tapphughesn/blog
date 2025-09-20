@@ -19,6 +19,15 @@ function App() {
             alt="Headshot picture of Nick Tapp-Hughes"
             className="left-portrait"
           />
+          <a
+            href="https://danielturbertphotography.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="headshot-link"
+          >
+            <span>Where did you get that awesome headshot?</span>
+          </a>
+
           <Contact />
         </aside>
         <RightContent />
@@ -35,14 +44,35 @@ const RightContent = () => {
         Who I Am
       </h1>
       <p className="main-paragraph">
-        I'm a software developer and researcher with 4 years of experience, specializing in developing high-quality customer-facing software, building and deploying AI/ML models, and analyzing big data.
-        Until I find my next full-time role, I'll be travelling Europe and the US, building this website, publishing scientific journal articles, writing technical blog posts, and dabbling in entrepreneurship.
+        I'm a software developer and researcher with 4 years of experience, specializing in building and deploying AI/ML models, developing high-quality customer-facing software, and analyzing big data.
       </p>
       <h1 className="main-subheading">
-        Experience
+        What I'm Doing
       </h1>
       <p className="main-paragraph">
-        blah blah
+        Until I find my next full-time role, I am publishing scientific journal articles, writing technical blog posts, dabbling in entrepreneurship, building this website, and traveling through Europe and the US.
+      </p>
+      <h1 className="main-subheading">
+        What I Can Do
+      </h1>
+      <p className="main-paragraph">
+        Build and deploy AI/ML models
+      </p>
+      <p className="main-paragraph">
+        Develop full-stack web applications
+      </p>
+      <p className="main-paragraph">
+        Conduct scientific research
+      </p>
+      <p className="main-paragraph">
+        Reason about mathematics
+      </p>
+      <p className="main-paragraph">
+        Communicate
+      </p>
+      <p className="main-paragraph">
+        Do you want to work with me?
+        Feel free to reach out.
       </p>
     </div>
   )

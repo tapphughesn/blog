@@ -9,8 +9,16 @@
   padding-top: 1px;
 }
 
-.main-paragraph {
-  text-indent: 2em;
+.headshot-link {
+  font-size: 6px;
+  margin-top: -10px;
+  color: black;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.headshot-link:hover {
+  color: #2563eb;
+  transform: translateY(-2px);
 }
 
 /* #region Navigation */
@@ -177,9 +185,8 @@
 
 .two-pane {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   /* mobile first: stacked */
-  gap: 1rem;
   margin-top: 2rem;
   /* space for fixed navbar */
   min-height: calc(100vh - 4rem);
@@ -201,7 +208,7 @@
 /* Left pane */
 .left {
   flex: 0 0 280px;
-  /* fixed width */
+  border-top: 1px solid #e5e7eb;
 }
 
 .left-portrait {
@@ -224,6 +231,8 @@
     /* subtle grey */
     padding-right: 2rem;
     padding-left: 0;
+
+    border-top: 0px;
   }
 }
 
@@ -271,7 +280,6 @@
 
 .contact-section__link {
   align-items: center;
-  gap: 0.75rem;
   text-decoration: none;
   color: #374151;
   font-weight: 500;
