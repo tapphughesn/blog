@@ -1,0 +1,117 @@
+import "./App.css"
+import githubUrl from './icons/github.svg';
+import linkedinUrl from './icons/linkedin.svg';
+import emailUrl from './icons/email.svg';
+
+function About() {
+
+    return (
+        <div className="two-pane">
+            <LeftContent />
+            <RightContent />
+        </div>
+    );
+}
+export default About;
+
+const LeftContent = () => {
+    return (
+        <aside className="pane left">
+            <img
+                src="/front_portrait_downscaled.jpg"
+                alt="Headshot picture of Nick Tapp-Hughes"
+                className="left-portrait"
+            />
+            <a
+                href="https://danielturbertphotography.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="headshot-link"
+            >
+                <span>Where did you get that awesome headshot?</span>
+            </a>
+
+            <Contact />
+        </aside>
+    )
+}
+
+const RightContent = () => {
+    return (
+        <div className="pane right">
+            <h1 className="main-subheading">
+                Who I Am
+            </h1>
+            <p className="main-paragraph">
+                I'm a software developer and researcher with 4 years of experience, specializing in building and deploying AI/ML models, developing high-quality customer-facing software, and analyzing big data.
+            </p>
+            <h1 className="main-subheading">
+                What I'm Doing
+            </h1>
+            <p className="main-paragraph">
+                Until I find my next full-time role, I am publishing scientific journal articles, writing technical blog posts, dabbling in entrepreneurship, building this website, and traveling through Europe and the US.
+            </p>
+            <h1 className="main-subheading">
+                What I Can Do
+            </h1>
+            <p className="main-paragraph">
+                Build and deploy AI/ML models
+            </p>
+            <p className="main-paragraph">
+                Develop full-stack web applications
+            </p>
+            <p className="main-paragraph">
+                Conduct scientific research
+            </p>
+            <p className="main-paragraph">
+                Reason about mathematics
+            </p>
+            <p className="main-paragraph">
+                Communicate
+            </p>
+            <p className="main-paragraph">
+                Do you want to work with me?
+                Feel free to reach out.
+            </p>
+        </div>
+    )
+}
+
+const Contact = () => {
+    return (
+        <section id="contact" className="contact-section">
+
+            <h2 className="contact-section__header">Contact</h2>
+
+            <div className="contact-section__item">
+                <img src={emailUrl} alt="Email Icon" className="contact-icon" />
+                <span className="email-text">
+                    nicholas(dot)tapphughes(at)gmail(dot)com
+                </span>
+            </div>
+
+            <div className="contact-section__item">
+                <img src={githubUrl} alt="GitHub" className="contact-icon" />
+                <a
+                    href="https://github.com/tapphughesn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="contact-section__link"
+                >
+                    <span>GitHub</span>
+                </a>
+                <span className="separator">|</span>
+                <img src={linkedinUrl} alt="LinkedIn Icon" className="contact-icon" />
+                <a
+                    href="https://www.linkedin.com/in/nicholas-tapp-hughes-b75641142/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="contact-section__link"
+                >
+                    <span>LinkedIn</span>
+                </a>
+            </div>
+
+        </section>
+    );
+}

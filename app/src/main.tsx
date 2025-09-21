@@ -1,6 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import App from './App';
+import Blog from './blog';
+import CV from './cv';
+import About from './about';
+import Publications from './publications';
 import "./index.css";
 
 /** uncomment when I actually have a backend */
@@ -10,6 +15,15 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<About />} />
+          <Route path="blog" element={<Blog />} />
+          <Route path="cv" element={<CV />} />
+          <Route path="publications" element={<Publications />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );

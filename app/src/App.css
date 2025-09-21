@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+.routed-content {
+  margin-top: 2rem;
+}
+
 .main-subheading {
   padding-top: 1px;
 }
@@ -186,9 +190,6 @@
 .two-pane {
   display: flex;
   flex-direction: column-reverse;
-  /* mobile first: stacked */
-  margin-top: 2rem;
-  /* space for fixed navbar */
   min-height: calc(100vh - 4rem);
 }
 
