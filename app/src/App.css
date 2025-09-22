@@ -9,6 +9,32 @@
   margin-top: 2rem;
 }
 
+/* #region Publications */
+
+.publications-content {
+  text-align: left;
+  padding-top: 1rem;
+}
+
+.publications-header {
+  font-size: 20px;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.publications-list {
+  list-style-position: inside;
+  line-height: 1.5;
+  padding-left: 0;
+}
+
+.publications-list li {
+  margin-bottom: 1rem;
+}
+
+/* #endregion */
+
 /* #region About */
 
 .main-subheading {
