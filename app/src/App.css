@@ -13,16 +13,17 @@
   padding-top: 1px;
 }
 
-.headshot-link {
-  font-size: 6px;
-  margin-top: -10px;
-  color: black;
-  transition: color 0.2s ease, transform 0.2s ease;
+.CvPage {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 6rem);
 }
 
-.headshot-link:hover {
-  color: #2563eb;
-  transform: translateY(-2px);
+.CvEmbed {
+  border: none;
+  height: 100vh;
+  flex: 1;
+  overflow: auto;
 }
 
 /* #region Navigation */
@@ -189,7 +190,7 @@
 
 /* #endregion */
 
-/* #region TwoPane */
+/* #region About TwoPanes */
 
 .two-pane {
   display: flex;
@@ -220,6 +221,18 @@
   width: 100%;
   object-fit: contain;
   padding-top: 1em;
+}
+
+.headshot-link {
+  font-size: 6px;
+  margin-top: -10px;
+  color: black;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.headshot-link:hover {
+  color: #2563eb;
+  transform: translateY(-2px);
 }
 
 @media (min-width: 768px) {
