@@ -9,9 +9,15 @@
   margin-top: 2rem;
 }
 
+/* #region About */
+
 .main-subheading {
   padding-top: 1px;
 }
+
+/* #endregion */
+
+/* #region CV */
 
 .CvPage {
   display: flex;
@@ -29,6 +35,8 @@
   flex: 1;
   overflow: auto;
 }
+
+/* #endregion */
 
 /* #region Navigation */
 
