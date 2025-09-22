@@ -19,6 +19,10 @@
   height: calc(100vh - 6rem);
 }
 
+.CvDownload {
+  padding-bottom: 1rem;
+}
+
 .CvEmbed {
   border: none;
   height: 100vh;
