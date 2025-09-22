@@ -110,8 +110,10 @@
   transition: color 0.2s ease;
 }
 
-.nav__logo:hover {
-  color: #2563eb;
+@media (hover: hover) and (pointer: fine) {
+  .nav__logo:hover {
+    color: #2563eb;
+  }
 }
 
 .nav__content {
