@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import "./App.css"
 
 function App() {
@@ -19,6 +19,8 @@ export default App;
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const activeLocation = useLocation();
 
   // Handle scroll effect
   useEffect(() => {
@@ -48,7 +50,6 @@ const Navigation = () => {
       <div className="nav__container">
         <div className="nav__content">
 
-          {/* Upper Left Corner Name */}
           <div className="nav__brand">
             <Link
               to="/"
@@ -65,7 +66,7 @@ const Navigation = () => {
               <Link
                 key={item.name}
                 to={item.to}
-                className="nav__link"
+                className={(activeLocation.pathname == item.to) ? "nav__link active" : "nav__link"}
               >
                 {item.name}
               </Link>

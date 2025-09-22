@@ -104,6 +104,10 @@
   transition: all 0.2s ease;
 }
 
+.nav__link.active {
+  text-decoration: underline;
+}
+
 .nav__link:hover {
   color: #2563eb;
   background: #eff6ff;
