@@ -292,6 +292,10 @@
 
     border-top: 0px;
   }
+
+  .right {
+    padding-left: 2rem;
+  }
 }
 
 /* Right pane */
