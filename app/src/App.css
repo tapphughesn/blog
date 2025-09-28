@@ -9,6 +9,11 @@
   margin-top: 2rem;
 }
 
+.main-paragraph {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
 /* #region Publications */
 
 .publications-content {
