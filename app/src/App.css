@@ -300,6 +300,7 @@
 
   .right {
     padding-left: 2rem;
+    padding-right: 1rem;
   }
 }
 
@@ -307,6 +308,8 @@
 .right {
   flex: 1;
   padding-top: 1rem;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .right p {
