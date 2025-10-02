@@ -280,6 +280,14 @@
   transform: translateY(-2px);
 }
 
+/* Right pane */
+.right {
+  flex: 1;
+  padding-top: 1rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 @media (min-width: 768px) {
   .left {
     position: sticky;
@@ -302,14 +310,6 @@
     padding-left: 2rem;
     padding-right: 1rem;
   }
-}
-
-/* Right pane */
-.right {
-  flex: 1;
-  padding-top: 1rem;
-  padding-left: 0;
-  padding-right: 0;
 }
 
 .right p {
