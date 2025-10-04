@@ -9,9 +9,17 @@
   margin-top: 2rem;
 }
 
-.main-paragraph {
-  font-size: 1.125rem;
+.right p {
+  font-size: 1rem;
   line-height: 1.6;
+  font-family: Georgia, serif;
+}
+
+.right li {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-family: Georgia, serif;
+  text-align: left;
 }
 
 /* #region Publications */
