@@ -47,7 +47,7 @@ const RightContent = () => {
                 I'm a software developer and researcher with 4 years of working experience, specializing in building, evaluating, and deploying AI/ML models, developing full-stack web applications, and big data analytics. My primary goal is to align my expertise with hard problems whose solutions are real-word systems.
             </p>
             <p className="main-paragraph">
-                I am the product of a wonderful family, an amazing group of friends, and a series of invaluable teachers and mentors.
+                I am the product of a wonderful family, a supportive group of friends, and invaluable teachers and mentors.
             </p>
             <h1 className="main-subheading">
                 Solving Problems
@@ -56,26 +56,42 @@ const RightContent = () => {
                 In my experience, the following methods for solving problems have proven useful:
             </p>
             <ul>
-                <li>Searching for similar problems that have been solved</li>
-                <li>Organizing information (diagramming, writing a design doc, etc.) to more efficiently hold relevant information mentally</li>
-                <li>Deep-diving into the relevant set of tools/technologies to learn how to better use them</li>
-                <li>Taking a walk, getting some sleep, or meditating</li>
-                <li>Explaining to and discussing with coworkers and leaders (if working in an organization); or friends, family, mentors and peers (if working independently)</li>
-                <li>Taking an idea that is known to be rough or incomplete and trying to implement it anyway, in the hopes of better understanding what the right idea is</li>
-                <li>Exploring a wider set of tools</li>
-                <li>Reconsidering the path that led to the problem at hand</li>
+                <li>
+                    Searching for similar problems that have been solved
+                </li>
+                <li>
+                    Organizing information (diagramming, writing a design doc.) to more efficiently hold relevant information
+                </li>
+                <li>
+                    Deep-diving into the relevant set of tools/technologies
+                </li>
+                <li>
+                    Taking a walk, getting some sleep, or meditating
+                </li>
+                <li>
+                    Explaining to and discussing with coworkers and leaders (if working in an organization); or friends, family, mentors and peers (if working independently)
+                </li>
+                <li>
+                    Taking an idea that is known to be rough or incomplete and trying to implement it anyway
+                </li>
+                <li>
+                    Exploring a wider set of tools
+                </li>
+                <li>
+                    Reconsidering the path that led to the problem at hand
+                </li>
             </ul>
             <p className="main-paragraph">
-                After engaging in these problem-solving activities for long enough, the engineer’s brain does something magical: new ideas for improvements, or even a whole solution to the problem, arise! Then comes the implementation, and you have a real-world solution. This process is deeply meaningful to me.
+                After engaging in these problem-solving activities, new ideas for improvements, or even a whole solution to the problem, arise! Then comes the implementation, and you have a real-world solution. This process is deeply meaningful to me.
             </p>
             <p className="main-paragraph">
-                To see where I developed and applied my problem-solving method, you can view my <Link to="/cv">CV</Link>.
+                To see where I developed and applied this problem-solving method, you can view my <Link to="/cv">CV</Link>.
             </p>
             <h1 className="main-subheading">
                 What I'm Doing Now
             </h1>
             <p className="main-paragraph">
-                In July, I left my role as a software developer at <a href="https://www.epic.com/">Epic</a>. I’m currently traveling in Europe and the US, publishing scientific papers, building this website, writing blog posts, meeting with my mentors, and working on personal projects. Would you like to contact me, for any reason at all? Feel free to reach out.
+                In July, I left my role as a software developer at <a href="https://www.epic.com/">Epic</a>. I’m currently traveling in Europe and the US, publishing scientific papers, building this website, writing blog posts, meeting with my mentors, and working on personal projects. Would you like to contact me? Feel free to reach out.
             </p>
         </div>
     )
