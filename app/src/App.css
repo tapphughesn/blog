@@ -9,18 +9,87 @@
   margin-top: 2rem;
 }
 
-.right p {
-  font-size: 1rem;
-  line-height: 1.6;
-  font-family: Georgia, serif;
+/* #region Blog */
+
+.blog-top-section {
+  padding: 1rem;
 }
 
-.right li {
+.blog-top-section p {
+  max-width: 38rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.blog-list {
+  text-align: left;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 2rem;
+}
+
+.blog-listing {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.blog-listing span {
+  font-size: 0.8rem;
+}
+
+@media (min-width: 768px) {
+  .blog-listing {
+    padding-bottom: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .blog-top-section {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+.post-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.blog-post {
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.blog-post p,
+.blog-post li {
+  font-family: Georgia, serif;
   font-size: 1rem;
   line-height: 1.6;
-  font-family: Georgia, serif;
-  text-align: left;
 }
+
+.blog-post h1 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  margin-top: 4rem;
+}
+
+.blog-post span {
+  display: block;
+  text-align: center;
+  font-size: 0.8rem;
+  margin-bottom: 3rem;
+}
+
+.blog-post hr {
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  height: 0;
+  margin: 1rem;
+}
+
+/* #endregion */
 
 /* #region Publications */
 
@@ -52,6 +121,23 @@
 
 .main-subheading {
   padding-top: 1px;
+}
+
+.right p {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-family: Georgia, serif;
+}
+
+.right li {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-family: Georgia, serif;
+  text-align: left;
+}
+
+.footnote-ref {
+  scroll-margin-top: 4rem;
 }
 
 /* #endregion */
