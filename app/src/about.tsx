@@ -46,9 +46,6 @@ const RightContent = () => {
             <p className="main-paragraph">
                 I'm a software developer and researcher with 4 years of working experience, specializing in building, evaluating, and deploying AI/ML models, developing full-stack web applications, and big data analytics. My primary goal is to align my expertise with hard problems whose solutions are real-word systems.
             </p>
-            <p className="main-paragraph">
-                I am the product of a wonderful family, a supportive group of friends, and invaluable teachers and mentors.
-            </p>
             <h1 className="main-subheading">
                 Solving Problems
             </h1>
