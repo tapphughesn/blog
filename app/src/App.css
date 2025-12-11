@@ -303,11 +303,11 @@
 .nav__mobile--open {
   max-height: 16rem;
   opacity: 1;
+  background: transparent;
 }
 
 .nav__mobile-links {
   padding: 0.5rem 0.5rem 0.75rem;
-  background: white;
   border-top: 1px solid #e5e7eb;
 }
 
