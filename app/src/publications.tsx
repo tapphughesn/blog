@@ -9,14 +9,14 @@ function Publications() {
             </h2>
             <ol className="publications-list">
                 <li>
-                    Stephen M. Pizer, Zhiyuan Liu, Junjie Zhao, Nicholas Tapp-Hughes, James Damon, Miaomiao Zhang, JS Marron, Mohsen Taheri, Jared Vicory,
+                    Stephen M. Pizer, Zhiyuan Liu, Junjie Zhao, <strong>Nicholas Tapp-Hughes</strong>, James Damon, Miaomiao Zhang, JS Marron, Mohsen Taheri, Jared Vicory,
                     <br />
                     "Interior Object Geometry via Fitted Frames,"
                     <br />
                     Available: Springer, <a href="https://rdcu.be/eFX0G">https://rdcu.be/eFX0G.</a>
                 </li>
                 <li>
-                    Nicholas Tapp Hughes,
+                    <strong>Nicholas Tapp Hughes</strong>,
                     <br />
                     "A 3d U-net for Segmentation of Subcortical Structures In MR Images of 12 and 24 Month-old Infants,"
                     <br />
