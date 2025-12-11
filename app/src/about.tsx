@@ -79,7 +79,7 @@ const RightContent = () => {
                 </li>
             </ul>
             <p className="main-paragraph">
-                After engaging in these problem-solving activities, new ideas for improvements, or even a whole solution to the problem, arise! Then comes the implementation, and you have a real-world solution. This process is deeply meaningful to me.
+                After engaging in these problem-solving activities, new ideas for improvements, or even a whole solution to the problem, arise! Then comes the implementation, and you have a real-world solution.
             </p>
             <p className="main-paragraph">
                 To see where I developed and applied this problem-solving method, you can view my <Link to="/cv">CV</Link>.
@@ -88,7 +88,7 @@ const RightContent = () => {
                 What I'm Doing Now
             </h1>
             <p className="main-paragraph">
-                In July, I left my role as a software developer at <a href="https://www.epic.com/">Epic</a>. I’m currently traveling in Europe and the US, publishing scientific papers, building this website, writing blog posts, meeting with my mentors, and working on personal projects. Would you like to contact me? Feel free to reach out.
+                In July, I left my role as a software developer at <a href="https://www.epic.com/">Epic</a>. I’m currently traveling in Europe and the US, publishing scientific papers, building this website, writing blog posts, meeting with my mentors, and working on projects. Would you like to contact me? Feel free to reach out.
             </p>
         </div>
     )
