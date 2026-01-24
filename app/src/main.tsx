@@ -9,7 +9,7 @@ import Publications from './publications';
 import BlogPost from './blogpost';
 import "./index.css";
 
-/** uncomment when I have a backend */
+/** uncomment when I need to connect a backend */
 // import { Amplify } from "aws-amplify";
 // import outputs from "../amplify_outputs.json";
 // Amplify.configure(outputs);
