@@ -11,6 +11,7 @@ function App() {
       <div className="routed-content">
         <Outlet />
       </div>
+      <Footer/>
     </main>
   );
 }
@@ -108,3 +109,10 @@ const Navigation = () => {
     </nav>
   );
 };
+
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  return <footer className="footer-content">
+    <p>© {currentYear} Nicholas Tapp-Hughes</p>
+  </footer>
+}
