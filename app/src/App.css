@@ -10,7 +10,9 @@
   text-align: center;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0
 }
@@ -510,4 +512,5 @@ html, body, #root {
   width: 100%;
   flex-shrink: 0;
 }
+
 /* #endregion */

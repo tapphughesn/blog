@@ -11,7 +11,7 @@ function App() {
       <div className="routed-content">
         <Outlet />
       </div>
-      <Footer/>
+      <Footer />
     </main>
   );
 }
