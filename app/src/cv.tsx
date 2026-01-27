@@ -5,7 +5,7 @@ function Cv() {
   return (
     <div className="CvPage">
       <div className="CvDownload">
-        You can view my CV as an embedded PDF below or <a href="/NickCV_2page_Fall2025.pdf">download it</a> (better on mobile).
+        You can view my CV as an embedded PDF below or <a href="/NickCV_1page_Spr2026.pdf">download it</a> (better on mobile).
       </div>
       <iframe
         className="CvEmbed"
