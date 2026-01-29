@@ -150,5 +150,14 @@ more than a day old. If someone spams the client with new email addresses and
 creates a bunch of unverified subscibers, causing the Subscribers table to get
 too big, I will manually activate this lambda from the AWS Console.
 
+### Future Enhancements
 
+1. Rate limiting: preventing spam email addresses by implementing some kind of
+   API rate limiting on the new subscriber workflow.
+2. Add functionality for rotating out the VerificationToken so that it can't be
+   brute force guessed by a malicious actor.
+3. Add a secondary index on VerificationToken so that querying the Subscribers
+   table for that token will be fast.
+4. Use DynamoDB's Time To Live (TTL) feature to automatically delete stale new
+   subscriber records, preventing the need for manual flushing.
 
