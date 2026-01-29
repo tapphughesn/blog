@@ -15,7 +15,7 @@ function Blog() {
         <Link className="post-link" to="/blog/why_write_blog_posts">
           <div className="blog-listing">
             <h3> Why Write Blog Posts?</h3>
-            <span>October 12<sup>th</sup> 2025 &middot; 8 minute read</span>
+            <span>October 12<sup>th</sup> 2025 &middot; 5 minute read</span>
           </div>
         </Link>
       </div>
