@@ -5,18 +5,24 @@ applications:
       phases:
         build:
           commands:
-            - npm ci --cache .npm --prefer-offline
-            - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+            # - npm ci --cache .npm --prefer-offline
+            - npm install -g pnpm
+            - pnpm config set store-dir .pnpm-store
+            - pnpm install
+            # - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+            - pnpm ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
     frontend:
       phases:
         build:
           commands:
-            - npm run build
+            # - npm run build
+            - pnpm run build
       artifacts:
         baseDirectory: dist
         files:
           - '**/*'
       cache:
         paths:
-          - .npm/**/*
+          # - .npm/**/*
+          - .pnpm-store/**/*
           - node_modules/**/*
