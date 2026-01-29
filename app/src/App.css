@@ -8,11 +8,11 @@
   padding: 2rem;
   padding-bottom: 0;
   text-align: center;
+  height: 100%
 }
 
 html,
-body,
-#root {
+body {
   height: 100%;
   margin: 0
 }
