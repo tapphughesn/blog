@@ -140,6 +140,28 @@ body {
   height: 37.5px;
 }
 
+.subscribe-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.subscribe-message {
+  margin-left: 9px;
+  margin-top: 5px;
+  font-size: 12px;
+  min-height: 14px; /* Approximate height to prevent layout shift */
+  text-align: left;
+  width: 100%;
+}
+
+.subscribe-message-error {
+  color: red;
+}
+
+.subscribe-message-success {
+  color: green;
+}
+
 /* #endregion */
 
 /* #region Publications */
