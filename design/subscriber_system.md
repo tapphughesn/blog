@@ -2,7 +2,7 @@
 
 ### Cloud Infra
 
-The subscriber system will be built entirely with AWS. The relevant services are shown below:
+The subscriber system will be built entirely with AWS. The relevant components are shown below:
 
 ```mermaid
 ---
