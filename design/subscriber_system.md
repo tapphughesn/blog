@@ -33,9 +33,10 @@ A DynamoDB table called Subscribers (provisioned by Amplify) will include these 
 * subscribedStatus (bool) 
 * verifiedStatus (bool) 
 * VerificationToken (string)
-* createdAt (datetime) -- when the record was created
 * subscribedAt (datetime) -- the most recent time the user subscribed
 * verifiedAt (datetime) -- the most recent time the user was verified
+* createdAt (datetime) -- when the record was created
+* updatedAt (datetime) -- when the record was updated
 
 ### User Interface
 
