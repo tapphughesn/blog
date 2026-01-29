@@ -3,11 +3,19 @@ import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 const schema = a.schema({
   Subscribers: a
     .model({
-      email: a.string().required(),
-      verified: a.boolean(),
-      verificationToken: a.string(),
-      subscribed: a.boolean(),
+      emailAddress: a.string().required(),
+      subscribedStatus: a.boolean(),
+      verifiedStatus: a.boolean(),
+      verificationToken: a.string().required(),
+      subscribedAt: a.datetime(),
+      verifiedAt: a.datetime(),
     })
+    .identifier(['emailAddress'])
+    .secondaryIndexes((index) => [
+      index("verificationToken")
+        .name("ByVerificationToken") 
+        .queryField("listSubscribersByToken") 
+    ])
     .authorization((allow) => [allow.publicApiKey()]),
 });
 
@@ -18,8 +26,8 @@ export const data = defineData({
   authorizationModes: {
     defaultAuthorizationMode: "apiKey",
     // API Key is used for a.allow.public() rules
-    apiKeyAuthorizationMode: {
-      expiresInDays: 30,
-    },
+    // apiKeyAuthorizationMode: {
+    //   expiresInDays: 30,
+    // },
   },
 });
