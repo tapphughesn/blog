@@ -15,7 +15,7 @@ flowchart LR
     SES[SES <br/> <i>Email Delivery</i>]
 
     subgraph DynamoDB [DynamoDB]
-        DB["<b>Subscribers</b> <br/> 🔑 EmailAddress <br/> 🔹 SubscribedStatus <br/> 🔹 VerifiedStatus <br/> 🔹 VerificationToken"]
+        DB["<b>Subscribers</b> <br/> 🔑 emailAddress <br/> 🔹 subscribedStatus <br/> 🔹 VerifiedStatus <br/> 🔹 VerificationToken"]
     end
 
     Amplify -- Deploys --> Server
@@ -29,13 +29,13 @@ flowchart LR
 ### Data Schema
 
 A DynamoDB table called Subscribers (provisioned by Amplify) will include these fields:
-* EmailAddress (string) (primary key)
-* SubscribedStatus (bool) 
-* VerificationStatus (bool) 
+* emailAddress (string) (primary key)
+* subscribedStatus (bool) 
+* verifiedStatus (bool) 
 * VerificationToken (string)
-* CreatedAt (datetime) -- when the record was created
-* SubscribedAt (datetime) -- the most recent time the user subscribed
-* VerifiedAt (datetime) -- the most recent time the user was verified
+* createdAt (datetime) -- when the record was created
+* subscribedAt (datetime) -- the most recent time the user subscribed
+* verifiedAt (datetime) -- the most recent time the user was verified
 
 ### User Interface
 
@@ -97,7 +97,7 @@ When a user clicks the verification link in their email, they will be routed to
 a page on the website. That page will parse the verification token from the URL
 and send a request to Lambda. Lambda will scan the Subscribers table and look
 for a record that matches the verification token and is unverified. That record
-will have VerificationStatus and SubscribedStatus set to True. Then Lambda will
+will have verifiedStatus and subscribedStatus set to True. Then Lambda will
 send a response to inform the client that verification was a success, and the
 client will tell the user.
 
@@ -137,7 +137,7 @@ When a user clicks the unsubscribe link in their email, it takes them to a page
 on my website that works similarly to the verification page. The page parses
 out the verification token and sends a request to Lambda, which scans the
 Subscribers table for a row with that verification token. If a row is found,
-SubscribedStatus will be set to False (VerificationStatus will remain True).
+subscribedStatus will be set to False (verifiedStatus will remain True).
 Lambda will send a response to the client that the unsubscription worked.
 
 If a matching record was not found, then Lambda will send a response that the
