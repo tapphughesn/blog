@@ -6,7 +6,7 @@ export function SubscribeComponent() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const onSubscribe = () => {
+  const onSubscribe = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setMessage("Invalid email format");
@@ -15,23 +15,20 @@ export function SubscribeComponent() {
 
     setMessage("Request sent...");
 
-    // AWS Lambda boilerplate
-    // TODO: Integrate with AWS Amplify or API Gateway to trigger Lambda
-    /*
-    const triggerSubscribeLambda = async (userEmail: string) => {
-      try {
-        // const response = await fetch('YOUR_LAMBDA_API_ENDPOINT', {
-        //   method: 'POST',
-        //   body: JSON.stringify({ email: userEmail }),
-        //   headers: { 'Content-Type': 'application/json' }
-        // });
-        // if (response.ok) { ... }
-      } catch (error) {
-        console.error("Failed to subscribe", error);
-      }
-    };
-    triggerSubscribeLambda(email);
-    */
+    // TODO: Replace with actual function URL from amplify_outputs.json after first deploy
+    const SUBSCRIBER_FUNCTION_URL = "YOUR_FUNCTION_URL";
+
+    try {
+      const response = await fetch(SUBSCRIBER_FUNCTION_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "subscribe", email }),
+      });
+      const data = await response.json();
+      setMessage(data.message);
+    } catch (error) {
+      setMessage("Error: could not reach server");
+    }
   };
 
   return (
