@@ -9,18 +9,15 @@ The subscriber system will be built entirely with AWS. The relevant services are
 title: AWS Components
 ---
 flowchart LR
-    %% Main Components
     Amplify[AWS Amplify <br/> <i>CI/CD & Hosting</i>]
     Server[Web Server <br/> <i>Content and Client Behavior</i>]
     Lambda{{AWS Lambda <br/> <i>Subscription Logic</i>}}
     SES[SES <br/> <i>Email Delivery</i>]
 
-    %% Detailed Database Node (Simulated ERD)
     subgraph DynamoDB [DynamoDB]
-        DB["<b>SUBSCRIBER</b> <br/> 🔑 email_address <br/> 🔹 sub_status <br/> 🔹 verified_status <br/> 🔹 created_at"]
+        DB["<b>Subscribers</b> <br/> 🔑 EmailAddress <br/> 🔹 SubscribedStatus <br/> 🔹 VerifiedStatus <br/> 🔹 VerificationToken"]
     end
 
-    %% Connections
     Amplify -- Deploys --> Server
     Amplify -- Provisions --> DB
     Server -- API Request --> Lambda
@@ -35,6 +32,7 @@ A DynamoDB table called Subscribers (provisioned by Amplify) will include these 
 * EmailAddress (string) (primary key)
 * SubscribedStatus (bool) 
 * VerificationStatus (bool) 
+* VerificationToken (string)
 * CreatedAt (datetime) -- when the record was created
 * SubscribedAt (datetime) -- the most recent time the user subscribed
 * VerifiedAt (datetime) -- the most recent time the user was verified
