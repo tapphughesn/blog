@@ -67,7 +67,7 @@ function Blog() {
     <div className="blog-content">
       <div className="blog-top-section">
         <p>
-          Welcome to my blog, where I write about interesting technical topics.
+          Welcome to my blog, where I occasionally write about interesting technical topics.
         </p>
         <SubscribeComponent />
       </div>
