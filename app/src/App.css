@@ -34,14 +34,15 @@ body {
 /* #region Blog */
 
 .blog-top-section {
-  padding: 1rem;
+  padding-bottom: 1rem;
   padding-top: 2rem;
 }
 
 .blog-top-section p {
-  max-width: 40rem;
+  max-width: 39rem;
   width: 100%;
   margin: 0 auto;
+  text-align: left;
 }
 
 .blog-list {
