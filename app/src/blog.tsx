@@ -6,15 +6,18 @@ import outputs from "../amplify_outputs.json";
 export function SubscribeComponent() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [messageStatus, setMessageStatus] = useState<'neutral' | 'success' | 'error'>('neutral');
 
   const onSubscribe = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setMessage("Invalid email format");
+      setMessageStatus('error');
       return;
     }
 
-    setMessage("Request sent...");
+    setMessage("Sent subscription request...");
+    setMessageStatus('neutral');
 
     const SUBSCRIBER_FUNCTION_URL = outputs.custom.subscriberFunctionUrl;
 
@@ -26,8 +29,10 @@ export function SubscribeComponent() {
       });
       const data = await response.json();
       setMessage(data.message);
+      setMessageStatus('success');
     } catch (error) {
-      setMessage("Error: could not reach server");
+      setMessage("Error: could not reach server. Try again later.");
+      setMessageStatus('error');
     }
   };
 
@@ -48,7 +53,7 @@ export function SubscribeComponent() {
           Subscribe
         </button>
       </div>
-      <div className={`subscribe-message ${message.includes('Invalid') ? 'subscribe-message-error' : 'subscribe-message-success'}`}>
+      <div className={`subscribe-message ${messageStatus === 'error' ? 'subscribe-message-error' : messageStatus === 'success' ? 'subscribe-message-success' : ''}`}>
         {message}
       </div>
     </div>
