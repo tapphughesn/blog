@@ -1,7 +1,7 @@
 import "./App.css"
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import outputs from "../amplify_outputs.json";
+import { subscribe } from './subscriberApi';
 
 export function SubscribeComponent() {
   const [email, setEmail] = useState('');
@@ -19,17 +19,23 @@ export function SubscribeComponent() {
     setMessage("Sent subscription request...");
     setMessageStatus('neutral');
 
-    const SUBSCRIBER_FUNCTION_URL = outputs.custom.subscriberFunctionUrl;
-
     try {
-      const response = await fetch(SUBSCRIBER_FUNCTION_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "subscribe", email }),
-      });
-      const data = await response.json();
-      setMessage(data.message);
-      setMessageStatus('success');
+      // Status codes are semantically significant
+      // See the contract in ../../design/subscriber_system.md
+      const status = await subscribe(email);
+      if (status === 201) {
+        setMessage("Verification email sent! Check your inbox.");
+        setMessageStatus('success');
+      } else if (status === 200) {
+        setMessage("You are already subscribed.");
+        setMessageStatus('success');
+      } else if (status === 422) {
+        setMessage("Invalid email format.");
+        setMessageStatus('error');
+      } else {
+        setMessage("Something went wrong. Try again later.");
+        setMessageStatus('error');
+      }
     } catch (error) {
       setMessage("Error: could not reach server. Try again later.");
       setMessageStatus('error');
