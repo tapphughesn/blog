@@ -7,6 +7,8 @@ import CV from './cv';
 import About from './about';
 import Publications from './publications';
 import BlogPost from './blogpost';
+import Verify from './verify';
+import Unsubscribe from './unsubscribe';
 import "./index.css";
 
 // Amplify backend
@@ -24,6 +26,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="publications" element={<Publications />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog/:title" element={<BlogPost />} />
+          <Route path="verify" element={<Verify />} />
+          <Route path="unsubscribe" element={<Unsubscribe />} />
         </Route>
       </Routes>
     </BrowserRouter>
