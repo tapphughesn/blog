@@ -39,9 +39,10 @@ body {
 }
 
 .blog-top-section p {
-  max-width: 40rem;
+  max-width: 39rem;
   width: 100%;
   margin: 0 auto;
+  text-align: left;
 }
 
 .blog-list {
