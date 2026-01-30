@@ -33,8 +33,10 @@ def handle_verify(query_params):
     if not token:
         return {"statusCode": 400}
 
-    # TODO: implement verify logic
-    return {"statusCode": 200}
+    # TODO: implement actual verify logic
+    if token == "foobar":
+        return {"statusCode": 200}
+    return {"statusCode": 404}
 
 
 def handle_unsubscribe(query_params):
@@ -43,5 +45,7 @@ def handle_unsubscribe(query_params):
     if not token:
         return {"statusCode": 400}
 
-    # TODO: implement unsubscribe logic
-    return {"statusCode": 200}
+    # TODO: implement actual unsubscribe logic
+    if token == "foobar":
+        return {"statusCode": 200}
+    return {"statusCode": 404}

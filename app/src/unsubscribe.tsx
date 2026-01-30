@@ -1,10 +1,36 @@
 import "./App.css";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { unsubscribe } from "./subscriberApi";
 
 function Unsubscribe() {
+  const [searchParams] = useSearchParams();
+  const [message, setMessage] = useState("Unsubscribing...");
+
+  useEffect(() => {
+    const token = searchParams.get("verificationToken");
+    if (!token) {
+      setMessage("Invalid unsubscribe link.");
+      return;
+    }
+
+    unsubscribe(token).then((status) => {
+      if (status === 200) {
+        setMessage("You have been unsubscribed.");
+      } else if (status === 404) {
+        setMessage("User not found.");
+      } else {
+        setMessage("Unsubscribe failed. Try again later.");
+      }
+    }).catch(() => {
+      setMessage("Error: could not reach server. Try again later.");
+    });
+  }, [searchParams]);
+
   return (
-    <div className="blog-content">
-      <h2>Unsubscribe</h2>
-      <p>This is the unsubscribe landing page.</p>
+    <div>
+      <h3>Unsubscribe from Emails</h3>
+      <p>{message}</p>
     </div>
   );
 }
