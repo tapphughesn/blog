@@ -17,7 +17,7 @@ const fnUrl = subscriberLambda.addFunctionUrl({
   cors: {
     allowedOrigins: ['*'],
     allowedHeaders: ['Content-Type'],
-    allowedMethods: [HttpMethod.POST],
+    allowedMethods: [HttpMethod.POST, HttpMethod.PATCH, HttpMethod.DELETE],
   },
 });
 
