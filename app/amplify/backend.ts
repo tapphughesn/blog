@@ -2,8 +2,7 @@ import { defineBackend } from '@aws-amplify/backend';
 import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { subscriberHandler } from './functions/subscriber-handler/resource';
-import { FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
-import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { FunctionUrlAuthType, HttpMethod, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
 
 const backend = defineBackend({
   auth,
@@ -18,7 +17,7 @@ const fnUrl = subscriberLambda.addFunctionUrl({
   cors: {
     allowedOrigins: ['*'],
     allowedHeaders: ['Content-Type'],
-    allowedMethods: ['POST'],
+    allowedMethods: [HttpMethod.POST],
   },
 });
 
@@ -27,7 +26,7 @@ const subscribersTable = backend.data.resources.tables['Subscribers'];
 subscribersTable.grantReadWriteData(subscriberLambda);
 
 // Pass the table name to the Lambda as an environment variable
-subscriberLambda.addEnvironment('SUBSCRIBERS_TABLE_NAME', subscribersTable.tableName);
+(subscriberLambda as LambdaFunction).addEnvironment('SUBSCRIBERS_TABLE_NAME', subscribersTable.tableName);
 
 // Output the function URL so we can use it in the frontend
 backend.addOutput({

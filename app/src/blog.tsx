@@ -1,6 +1,7 @@
 import "./App.css"
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import outputs from "../amplify_outputs.json";
 
 export function SubscribeComponent() {
   const [email, setEmail] = useState('');
@@ -15,8 +16,7 @@ export function SubscribeComponent() {
 
     setMessage("Request sent...");
 
-    // TODO: Replace with actual function URL from amplify_outputs.json after first deploy
-    const SUBSCRIBER_FUNCTION_URL = "YOUR_FUNCTION_URL";
+    const SUBSCRIBER_FUNCTION_URL = outputs.custom.subscriberFunctionUrl;
 
     try {
       const response = await fetch(SUBSCRIBER_FUNCTION_URL, {
