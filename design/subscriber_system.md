@@ -20,6 +20,7 @@ flowchart LR
 
     Amplify -- Deploys --> Server
     Amplify -- Provisions --> DB
+    Amplify -- Provisions --> Lambda
     Server -- API Request --> Lambda
     Lambda -- API Response --> Server
     Lambda -- Query/Update --> DB
@@ -132,7 +133,7 @@ later. This email will include an unique unsubscribe link for each subscriber,
 since the unsubscribe link includes the verification token. This will be
 accomplished with SES Templated Emails (SendBulkTemplatedEmail).
 
-### Clicking Unsubscribe Link
+### Clicking the Unsubscribe Link
 
 When a user clicks the unsubscribe link in their email, it takes them to a page
 on my website that works similarly to the verification page. The page parses
@@ -143,6 +144,40 @@ Lambda will send a response to the client that the unsubscription worked.
 
 If a matching record was not found, then Lambda will send a response that the
 user was not found and the unsubscription did not work.
+
+### Lambda API 
+
+Lambda will handle three HTTP API routes that handle these requests:
+1. Subscribe (POST)
+    * Body contains emailAddress: string (required)
+2. Verify (PATCH /verify?verificationToken=<token>)
+    * No body since all the information is in the HTTP method and query parameter
+3. Unsubscribe (DELETE /unsubscribe?verificationToken=<token>)
+    * No body since all the information is in the HTTP method and query parameter
+
+The Lambda will always try to send responses back to the client. In the case of
+a subscribe request, the response will be one of:
+* 422 unprocessable Entity - The email address was invalid
+* 201 Created - The email address was not already in the table and was added OR
+  the email was in the table but isn't already subscribed. A verification email
+  was sent
+* 200 Ok - The email address exists in the table and is already subscribed. No
+  new record was added.
+* 400 Bad Request - the request was malformed
+
+In the case of a verify request, the response will be one of:
+* 200 Ok - The record was newly verified and subscribed, or it was already
+  verified and subscribed
+* 404 Not Found - The verification token doesn't exist in the table
+* 400 Bad Request - the request was malformed
+
+In the case of a unsubscribe request, the response will be one of:
+* 200 Ok - The record was found subscribedStatus set to false
+* 404 Not Found - The verification token doesn't exist in the table
+* 400 Bad Request - the request was malformed
+
+The responses will not have a body. The client will know what each of the
+response codes mean.
 
 ### Cleaning the Table
 
@@ -157,8 +192,6 @@ too big, I will manually activate this lambda from the AWS Console.
    API rate limiting on the new subscriber workflow.
 2. Add functionality for rotating out the VerificationToken so that it can't be
    brute force guessed by a malicious actor.
-3. Add a secondary index on VerificationToken so that querying the Subscribers
-   table for that token will be fast.
-4. Use DynamoDB's Time To Live (TTL) feature to automatically delete stale new
+3. Use DynamoDB's Time To Live (TTL) feature to automatically delete stale new
    subscriber records, preventing the need for manual flushing.
 
