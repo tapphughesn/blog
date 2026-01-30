@@ -75,6 +75,9 @@ function Blog() {
         <p>
           Welcome to my blog, where I occasionally write about interesting technical topics.
         </p>
+        <p>
+          If you'd like to get notified about my (always free) posts, you can subscribe:
+        </p>
         <SubscribeComponent />
       </div>
       <div className="blog-list">
