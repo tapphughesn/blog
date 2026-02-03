@@ -37,7 +37,10 @@ subscriberLambda.addToRolePolicy(new PolicyStatement({
 }));
 
 // Pass the sender email to the Lambda as an environment variable
-(subscriberLambda as LambdaFunction).addEnvironment('SES_SENDER_EMAIL', 'subscription@nicholastapphughes.com');
+(subscriberLambda as LambdaFunction).addEnvironment('SES_SENDER_EMAIL', 'subscription-manager@nicholastapphughes.com');
+
+// Pass the site domain to the Lambda as an environment variable
+(subscriberLambda as LambdaFunction).addEnvironment('SITE_DOMAIN', 'nicholastapphughes.com');
 
 // Output the function URL so we can use it in the frontend
 backend.addOutput({
