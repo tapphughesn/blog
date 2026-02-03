@@ -9,6 +9,8 @@ const schema = a.schema({
       verificationToken: a.string().required(),
       subscribedAt: a.datetime(),
       verifiedAt: a.datetime(),
+      createdAt: a.datetime(),
+      updatedAt: a.datetime(),
     })
     .identifier(['emailAddress'])
     .secondaryIndexes((index) => [
