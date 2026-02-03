@@ -55,7 +55,7 @@ subscriberLambda.addToRolePolicy(new PolicyStatement({
 // Set reserved concurrency to limit concurrent executions (prevents cost attacks)
 // Additional requests beyond this limit will receive 429 Too Many Requests
 const cfnFunction = subscriberLambda.node.defaultChild as CfnFunction;
-cfnFunction.reservedConcurrentExecutions = 10;
+cfnFunction.reservedConcurrentExecutions = 5;
 
 // Output the function URL so we can use it in the frontend
 backend.addOutput({
