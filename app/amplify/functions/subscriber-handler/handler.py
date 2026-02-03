@@ -248,20 +248,30 @@ def handle_verify(query_params):
         if item.get('verifiedStatus') and item.get('subscribedStatus'):
             return {"statusCode": 200}
 
-        # Update subscriber to verified and subscribed
+        # Update subscriber to verified and subscribed with conditional expression
+        # This prevents duplicate emails if verification link is clicked multiple times
         now = get_current_timestamp()
-        table.update_item(
-            Key={'emailAddress': email},
-            UpdateExpression='SET subscribedStatus = :s, verifiedStatus = :v, verifiedAt = :va, updatedAt = :u',
-            ExpressionAttributeValues={
-                ':s': True,
-                ':v': True,
-                ':va': now,
-                ':u': now
-            }
-        )
+        try:
+            table.update_item(
+                Key={'emailAddress': email},
+                UpdateExpression='SET subscribedStatus = :s, verifiedStatus = :v, verifiedAt = :va, updatedAt = :u',
+                ConditionExpression='attribute_not_exists(verifiedStatus) OR verifiedStatus = :false',
+                ExpressionAttributeValues={
+                    ':s': True,
+                    ':v': True,
+                    ':va': now,
+                    ':u': now,
+                    ':false': False
+                }
+            )
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
+                # Item was already verified by another concurrent request
+                print(f"Item already verified for {email}, skipping email")
+                return {"statusCode": 200}
+            raise
 
-        # Send confirmation email
+        # Send confirmation email only if update succeeded
         send_confirmation_email(email, token)
 
         return {"statusCode": 200}
