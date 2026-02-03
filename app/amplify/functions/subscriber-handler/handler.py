@@ -105,7 +105,7 @@ def send_confirmation_email(email, token):
         <h2>Subscription Confirmed!</h2>
         <p>Hello,</p>
         <p>Your subscription to Nick Tapp-Hughes's blog has been confirmed.</p>
-        <p>You'll receive email notifications whenever a new blog post is published.</p>
+        <p>You'll receive email notifications whenever a new blog post is published. This subscription is free.</p>
         <p>If you ever want to unsubscribe, you can do so at any time by clicking the link below:</p>
         <p><a href="{unsubscribe_url}">Unsubscribe</a></p>
         <p>Thank you for subscribing!</p>
@@ -121,7 +121,7 @@ Hello,
 
 Your subscription to Nick Tapp-Hughes's blog has been confirmed.
 
-You'll receive email notifications whenever a new blog post is published.
+You'll receive email notifications whenever a new blog post is published. This subscription is free.
 
 If you ever want to unsubscribe, you can do so at any time by visiting:
 {unsubscribe_url}
