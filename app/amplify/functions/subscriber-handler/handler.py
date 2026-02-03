@@ -186,8 +186,13 @@ def handle_subscribe(event):
             if existing_item.get('subscribedStatus') and existing_item.get('verifiedStatus'):
                 return {"statusCode": 200}
 
-        # Generate new verification token
-        token = generate_verification_token()
+        # Preserve verification token if record exists, otherwise generate new one
+        # This ensures all verification/unsubscribe links remain valid
+        if existing_item and existing_item.get('verificationToken'):
+            token = existing_item.get('verificationToken')
+        else:
+            token = generate_verification_token()
+
         now = get_current_timestamp()
 
         # Preserve createdAt if re-subscribing
