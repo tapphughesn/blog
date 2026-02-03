@@ -3,6 +3,7 @@ import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { subscriberHandler } from './functions/subscriber-handler/resource';
 import { FunctionUrlAuthType, HttpMethod, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
+import { PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
 const backend = defineBackend({
   auth,
@@ -27,6 +28,16 @@ subscribersTable.grantReadWriteData(subscriberLambda);
 
 // Pass the table name to the Lambda as an environment variable
 (subscriberLambda as LambdaFunction).addEnvironment('SUBSCRIBERS_TABLE_NAME', subscribersTable.tableName);
+
+// Grant the Lambda permission to send emails via SES
+subscriberLambda.addToRolePolicy(new PolicyStatement({
+  effect: Effect.ALLOW,
+  actions: ['ses:SendEmail', 'ses:SendBulkTemplatedEmail'],
+  resources: ['*'],
+}));
+
+// Pass the sender email to the Lambda as an environment variable
+(subscriberLambda as LambdaFunction).addEnvironment('SES_SENDER_EMAIL', 'subscription@nicholastapphughes.com');
 
 // Output the function URL so we can use it in the frontend
 backend.addOutput({
