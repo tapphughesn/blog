@@ -16,7 +16,7 @@ function Verify() {
 
     verify(token).then((status) => {
       if (status === 200) {
-        setMessage(`Verification succeeded! You are now subscribed to my blog. 
+        setMessage(`Verification succeeded! You are now subscribed to my blog.
                    Check your email for further confirmation.`);
       } else if (status === 404) {
         setMessage("User not found.");

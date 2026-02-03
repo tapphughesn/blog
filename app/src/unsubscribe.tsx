@@ -16,7 +16,7 @@ function Unsubscribe() {
 
     unsubscribe(token).then((status) => {
       if (status === 200) {
-        setMessage("You have been unsubscribed.");
+        setMessage("You have been unsubscribed. You may now close this window.");
       } else if (status === 404) {
         setMessage("User not found.");
       } else {
