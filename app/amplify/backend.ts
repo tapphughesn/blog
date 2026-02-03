@@ -26,6 +26,16 @@ const fnUrl = subscriberLambda.addFunctionUrl({
 const subscribersTable = backend.data.resources.tables['Subscribers'];
 subscribersTable.grantReadWriteData(subscriberLambda);
 
+// Grant Query permission for the secondary index
+subscriberLambda.addToRolePolicy(new PolicyStatement({
+  effect: Effect.ALLOW,
+  actions: ['dynamodb:Query'],
+  resources: [
+    subscribersTable.tableArn,
+    `${subscribersTable.tableArn}/index/*`
+  ],
+}));
+
 // Pass the table name to the Lambda as an environment variable
 (subscriberLambda as LambdaFunction).addEnvironment('SUBSCRIBERS_TABLE_NAME', subscribersTable.tableName);
 
