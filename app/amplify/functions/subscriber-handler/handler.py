@@ -8,16 +8,16 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 
 # Initialize AWS clients at module level for connection reuse
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table(os.environ['SUBSCRIBERS_TABLE_NAME'])
-ses_client = boto3.client('ses', region_name='us-east-2')
-sender_email = os.environ['SES_SENDER_EMAIL']
-site_domain = os.environ['SITE_DOMAIN']
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table(os.environ["SUBSCRIBERS_TABLE_NAME"])
+ses_client = boto3.client("ses", region_name="us-east-2")
+sender_email = os.environ["SES_SENDER_EMAIL"]
+site_domain = os.environ["SITE_DOMAIN"]
 
 
 def validate_email_format(email):
     """Validate email format using regex."""
-    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     return re.match(pattern, email) is not None
 
 
@@ -29,6 +29,22 @@ def generate_verification_token():
 def get_current_timestamp():
     """Get current UTC timestamp in ISO 8601 format."""
     return datetime.now(timezone.utc).isoformat()
+
+
+def verification_email_cooldown_passed(existing_item, cooldown_minutes=60):
+    """Check if enough time has passed since the last verification email was sent."""
+    if not existing_item:
+        return True
+
+    last_sent = existing_item.get("lastVerificationEmailSent")
+    if not last_sent:
+        return True
+
+    last_sent_dt = datetime.fromisoformat(last_sent.replace("Z", "+00:00"))
+    now = datetime.now(timezone.utc)
+    elapsed = (now - last_sent_dt).total_seconds() / 60
+
+    return elapsed >= cooldown_minutes
 
 
 def send_verification_email(email, token):
@@ -79,14 +95,13 @@ Nick Tapp-Hughes
     try:
         ses_client.send_email(
             Source=sender_email,
-            Destination={'ToAddresses': [email]},
+            Destination={"ToAddresses": [email]},
             Message={
-                'Subject': {'Data': "Verify your subscription to Nick Tapp-Hughes's blog"},
-                'Body': {
-                    'Text': {'Data': text_body},
-                    'Html': {'Data': html_body}
-                }
-            }
+                "Subject": {
+                    "Data": "Verify your subscription to Nick Tapp-Hughes's blog"
+                },
+                "Body": {"Text": {"Data": text_body}, "Html": {"Data": html_body}},
+            },
         )
         print(f"Verification email sent to {email}")
     except ClientError as e:
@@ -135,14 +150,13 @@ Nick Tapp-Hughes
     try:
         ses_client.send_email(
             Source=sender_email,
-            Destination={'ToAddresses': [email]},
+            Destination={"ToAddresses": [email]},
             Message={
-                'Subject': {'Data': "You are now subscribed to Nick Tapp-Hughes's blog"},
-                'Body': {
-                    'Text': {'Data': text_body},
-                    'Html': {'Data': html_body}
-                }
-            }
+                "Subject": {
+                    "Data": "You are now subscribed to Nick Tapp-Hughes's blog"
+                },
+                "Body": {"Text": {"Data": text_body}, "Html": {"Data": html_body}},
+            },
         )
         print(f"Confirmation email sent to {email}")
     except ClientError as e:
@@ -178,46 +192,64 @@ def handle_subscribe(event):
             return {"statusCode": 422}
 
         # Check if subscriber already exists
-        response = table.get_item(Key={'emailAddress': email})
-        existing_item = response.get('Item')
+        response = table.get_item(Key={"emailAddress": email})
+        existing_item = response.get("Item")
 
-        # If already subscribed and verified, return 200
+        # If already subscribed and verified, return 201 anyway to prevent email enumeration
         if existing_item:
-            if existing_item.get('subscribedStatus') and existing_item.get('verifiedStatus'):
-                return {"statusCode": 200}
+            if existing_item.get("subscribedStatus") and existing_item.get(
+                "verifiedStatus"
+            ):
+                return {"statusCode": 201}
+
+        # Check if we should send a verification email (rate limit to prevent harassment)
+        verification_cooldown_passed = verification_email_cooldown_passed(existing_item)
 
         # Preserve verification token if record exists, otherwise generate new one
         # This ensures all verification/unsubscribe links remain valid
-        if existing_item and existing_item.get('verificationToken'):
-            token = existing_item.get('verificationToken')
+        if existing_item and existing_item.get("verificationToken"):
+            token = existing_item.get("verificationToken")
         else:
             token = generate_verification_token()
 
         now = get_current_timestamp()
 
         # Preserve createdAt if re-subscribing
-        created_at = existing_item.get('createdAt', now) if existing_item else now
+        created_at = existing_item.get("createdAt", now) if existing_item else now
+
+        # Build item with conditional lastVerificationEmailSent
+        item = {
+            "emailAddress": email,
+            "verificationToken": token,
+            "subscribedStatus": False,
+            "verifiedStatus": False,
+            "subscribedAt": now,
+            "createdAt": created_at,
+            "updatedAt": now,
+        }
+
+        # Only update lastVerificationEmailSent if we're actually sending an email
+        if verification_cooldown_passed:
+            item["lastVerificationEmailSent"] = now
+        elif existing_item and existing_item.get("lastVerificationEmailSent"):
+            # Preserve existing timestamp if not sending
+            item["lastVerificationEmailSent"] = existing_item.get(
+                "lastVerificationEmailSent"
+            )
 
         # Create or update subscriber record
-        table.put_item(
-            Item={
-                'emailAddress': email,
-                'verificationToken': token,
-                'subscribedStatus': False,
-                'verifiedStatus': False,
-                'subscribedAt': now,
-                'createdAt': created_at,
-                'updatedAt': now
-            }
-        )
+        table.put_item(Item=item)
 
-        # Send verification email
-        send_verification_email(email, token)
+        # Send verification email only if cooldown has passed
+        if verification_cooldown_passed:
+            send_verification_email(email, token)
 
         return {"statusCode": 201}
 
     except ClientError as e:
-        print(f"AWS error: {e.response['Error']['Code']} - {e.response['Error']['Message']}")
+        print(
+            f"AWS error: {e.response['Error']['Code']} - {e.response['Error']['Message']}"
+        )
         return {"statusCode": 500}
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
@@ -233,19 +265,19 @@ def handle_verify(query_params):
 
         # Query by verification token using secondary index
         response = table.query(
-            IndexName='ByVerificationToken',
-            KeyConditionExpression=Key('verificationToken').eq(token)
+            IndexName="ByVerificationToken",
+            KeyConditionExpression=Key("verificationToken").eq(token),
         )
-        items = response.get('Items', [])
+        items = response.get("Items", [])
 
         if not items:
             return {"statusCode": 404}
 
         item = items[0]
-        email = item['emailAddress']
+        email = item["emailAddress"]
 
         # Check if already verified and subscribed (idempotent)
-        if item.get('verifiedStatus') and item.get('subscribedStatus'):
+        if item.get("verifiedStatus") and item.get("subscribedStatus"):
             return {"statusCode": 200}
 
         # Update subscriber to verified and subscribed with conditional expression
@@ -253,19 +285,19 @@ def handle_verify(query_params):
         now = get_current_timestamp()
         try:
             table.update_item(
-                Key={'emailAddress': email},
-                UpdateExpression='SET subscribedStatus = :s, verifiedStatus = :v, verifiedAt = :va, updatedAt = :u',
-                ConditionExpression='attribute_not_exists(verifiedStatus) OR verifiedStatus = :false',
+                Key={"emailAddress": email},
+                UpdateExpression="SET subscribedStatus = :s, verifiedStatus = :v, verifiedAt = :va, updatedAt = :u",
+                ConditionExpression="attribute_not_exists(verifiedStatus) OR verifiedStatus = :false",
                 ExpressionAttributeValues={
-                    ':s': True,
-                    ':v': True,
-                    ':va': now,
-                    ':u': now,
-                    ':false': False
-                }
+                    ":s": True,
+                    ":v": True,
+                    ":va": now,
+                    ":u": now,
+                    ":false": False,
+                },
             )
         except ClientError as e:
-            if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
+            if e.response["Error"]["Code"] == "ConditionalCheckFailedException":
                 # Item was already verified by another concurrent request
                 print(f"Item already verified for {email}, skipping email")
                 return {"statusCode": 200}
@@ -277,7 +309,9 @@ def handle_verify(query_params):
         return {"statusCode": 200}
 
     except ClientError as e:
-        print(f"AWS error: {e.response['Error']['Code']} - {e.response['Error']['Message']}")
+        print(
+            f"AWS error: {e.response['Error']['Code']} - {e.response['Error']['Message']}"
+        )
         return {"statusCode": 500}
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
@@ -293,32 +327,31 @@ def handle_unsubscribe(query_params):
 
         # Query by verification token using secondary index
         response = table.query(
-            IndexName='ByVerificationToken',
-            KeyConditionExpression=Key('verificationToken').eq(token)
+            IndexName="ByVerificationToken",
+            KeyConditionExpression=Key("verificationToken").eq(token),
         )
-        items = response.get('Items', [])
+        items = response.get("Items", [])
 
         if not items:
             return {"statusCode": 404}
 
         item = items[0]
-        email = item['emailAddress']
+        email = item["emailAddress"]
 
         # Update subscriber to unsubscribed (keep verifiedStatus=True)
         now = get_current_timestamp()
         table.update_item(
-            Key={'emailAddress': email},
-            UpdateExpression='SET subscribedStatus = :s, updatedAt = :u',
-            ExpressionAttributeValues={
-                ':s': False,
-                ':u': now
-            }
+            Key={"emailAddress": email},
+            UpdateExpression="SET subscribedStatus = :s, updatedAt = :u",
+            ExpressionAttributeValues={":s": False, ":u": now},
         )
 
         return {"statusCode": 200}
 
     except ClientError as e:
-        print(f"AWS error: {e.response['Error']['Code']} - {e.response['Error']['Message']}")
+        print(
+            f"AWS error: {e.response['Error']['Code']} - {e.response['Error']['Message']}"
+        )
         return {"statusCode": 500}
     except Exception as e:
         print(f"Unexpected error: {str(e)}")

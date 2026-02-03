@@ -20,14 +20,12 @@ export function SubscribeComponent() {
     setMessageStatus('neutral');
 
     try {
-      // Status codes are semantically significant
-      // See the contract in ../../design/subscriber_system.md
       const status = await subscribe(email);
       if (status === 201) {
-        setMessage("Verification email sent! Check your inbox.");
-        setMessageStatus('success');
-      } else if (status === 200) {
-        setMessage("You are already subscribed.");
+        // Message is intentionally vague to prevent email enumeration.
+        // We don't reveal whether the email is already subscribed or
+        // whether a verification email was actually sent.
+        setMessage(`Check your inbox at ${email} for a verification email!`);
         setMessageStatus('success');
       } else if (status === 422) {
         setMessage("Invalid email format.");

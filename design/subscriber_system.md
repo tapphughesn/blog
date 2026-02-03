@@ -71,13 +71,14 @@ If the subscriber already exists in the Subscriber table and they are subscribed
 If the subscriber does not exist or they are not subscribed (previously
 unsubscribed), then they need to be (re-)verified, to prevent someone from
 maliciously entering emails other than their own:
-* Lambda will generate a unique verification token for the potential subscriber
-  and add/overwrite a record in the Subscribers table with their email address,
-  verification token, subsribed = False, and Verified = False.
+* Lambda will generate a unique verification token for the a new subscriber and
+  resuse the old verification token for an old subscriber.
+* Lambda will add/overwrite a record in the Subscribers table with their email
+  address, verification token, subsribed = False, and Verified = False.
 * Lambda will send an email request to SES. The email will include a
   verification link with the new verification token included as a URL
   parameter. The email will inform the user that they should not act if they
-  didn't initiate the verification.
+  didn't initiate the verification. This email can only be sent once per hour.
 * Lambda will send a response to the client and the client will show the user
   that a verification email was sent.
 
@@ -88,9 +89,9 @@ title: Subscribe Button Behavior
 flowchart LR
     button[Click subscribe] -- lambda never responds --> hang([Error: server down, try again later])
     button -- invalid email format --> invalid([Error: invalid format])
-    button -- already subscribed and verified --> subscribed([Message: already subscribed])
-    button -- new subscriber --> verification([Send verification email])
-    button -- previously unsubscribed --> verification([Send verification email])
+    button -- already subscribed and verified --> verification([Conditionally send verification email])
+    button -- new subscriber --> verification
+    button -- previously unsubscribed --> verification
 ```
 
 ### Clicking the Verification Link
@@ -159,10 +160,11 @@ The Lambda will always try to send responses back to the client. In the case of
 a subscribe request, the response will be one of:
 * 422 unprocessable Entity - The email address was invalid
 * 201 Created - The email address was not already in the table and was added OR
-  the email was in the table but isn't already subscribed. A verification email
-  was sent
-* 200 Ok - The email address exists in the table and is already subscribed. No
-  new record was added.
+  the email was in the table but isn't already subscribed OR the record already
+  exists and is subscribed. We can't distinguish between these in the response,
+  or a bad actor could use the responses to determine who is subscribed
+  already. A verification email was sent and records were possibly
+  added/updated.
 * 400 Bad Request - the request was malformed
 
 In the case of a verify request, the response will be one of:

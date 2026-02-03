@@ -9,6 +9,7 @@ const schema = a.schema({
       verificationToken: a.string().required(),
       subscribedAt: a.datetime(),
       verifiedAt: a.datetime(),
+      lastVerificationEmailSent: a.datetime(),
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
     })
