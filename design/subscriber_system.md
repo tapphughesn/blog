@@ -36,6 +36,8 @@ A DynamoDB table called Subscribers (provisioned by Amplify) will include these 
 * VerificationToken (string)
 * subscribedAt (datetime) -- the most recent time the user subscribed
 * verifiedAt (datetime) -- the most recent time the user was verified
+* lastVerificationEmailSent (datetime) -- the most recent time a verification
+  email was sent to the user
 * createdAt (datetime) -- when the record was created
 * updatedAt (datetime) -- when the record was updated
 
@@ -71,14 +73,14 @@ If the subscriber already exists in the Subscriber table and they are subscribed
 If the subscriber does not exist or they are not subscribed (previously
 unsubscribed), then they need to be (re-)verified, to prevent someone from
 maliciously entering emails other than their own:
-* Lambda will generate a unique verification token for the a new subscriber and
-  resuse the old verification token for an old subscriber.
+* Lambda will generate a unique verification token for the a new subscriber OR
+  reuse the old verification token for an old subscriber.
 * Lambda will add/overwrite a record in the Subscribers table with their email
   address, verification token, subsribed = False, and Verified = False.
-* Lambda will send an email request to SES. The email will include a
-  verification link with the new verification token included as a URL
-  parameter. The email will inform the user that they should not act if they
-  didn't initiate the verification. This email can only be sent once per hour.
+* If a verification email was not sent in the last hour, Lambda will send an
+  email request to SES. The email will include a verification link with the new
+  verification token included as a URL parameter. The email will inform the
+  user that they should not act if they didn't initiate the verification.
 * Lambda will send a response to the client and the client will show the user
   that a verification email was sent.
 
