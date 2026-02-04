@@ -202,9 +202,6 @@ def handle_subscribe(event):
             ):
                 return {"statusCode": 201}
 
-        # Check if we should send a verification email (rate limit to prevent harassment)
-        verification_cooldown_passed = verification_email_cooldown_passed(existing_item)
-
         # Preserve verification token if record exists, otherwise generate new one
         # This ensures all verification/unsubscribe links remain valid
         if existing_item and existing_item.get("verificationToken"):
@@ -222,11 +219,16 @@ def handle_subscribe(event):
             "emailAddress": email,
             "verificationToken": token,
             "subscribedStatus": False,
-            "verifiedStatus": False,
+            "verifiedStatus": True
+            if (existing_item and existing_item.get("verifiedStatus"))
+            else False,
             "subscribedAt": now,
             "createdAt": created_at,
             "updatedAt": now,
         }
+
+        # Check if we should send a verification email (rate limit to prevent harassment)
+        verification_cooldown_passed = verification_email_cooldown_passed(existing_item)
 
         # Only update lastVerificationEmailSent if we're actually sending an email
         if verification_cooldown_passed:
