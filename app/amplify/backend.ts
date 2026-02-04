@@ -2,7 +2,7 @@ import { defineBackend } from '@aws-amplify/backend';
 import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { subscriberHandler } from './functions/subscriber-handler/resource';
-import { FunctionUrlAuthType, HttpMethod, Function as LambdaFunction, CfnFunction } from 'aws-cdk-lib/aws-lambda';
+import { FunctionUrlAuthType, HttpMethod, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
 import { PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
 const backend = defineBackend({
@@ -51,11 +51,6 @@ subscriberLambda.addToRolePolicy(new PolicyStatement({
 
 // Pass the site domain to the Lambda as an environment variable
 (subscriberLambda as LambdaFunction).addEnvironment('SITE_DOMAIN', 'nicholastapphughes.com');
-
-// Set reserved concurrency to limit concurrent executions (prevents cost attacks)
-// Additional requests beyond this limit will receive 429 Too Many Requests
-const cfnFunction = subscriberLambda.node.defaultChild as CfnFunction;
-cfnFunction.reservedConcurrentExecutions = 5;
 
 // Output the function URL so we can use it in the frontend
 backend.addOutput({
