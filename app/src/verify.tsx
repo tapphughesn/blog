@@ -19,7 +19,7 @@ function Verify() {
         setMessage(`Verification succeeded! You are now subscribed to my blog.
                    Check your email for further confirmation.`);
       } else if (status === 404) {
-        setMessage("User not found.");
+        setMessage("This verification link is broken; the user was not found.");
       } else {
         setMessage("Verification failed. Try again later.");
       }

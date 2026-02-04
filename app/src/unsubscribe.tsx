@@ -18,7 +18,7 @@ function Unsubscribe() {
       if (status === 200) {
         setMessage("You have been unsubscribed. You may now close this window.");
       } else if (status === 404) {
-        setMessage("User not found.");
+        setMessage("This unsubscribe link is broken; the user was not found.");
       } else {
         setMessage("Unsubscribe failed. Try again later.");
       }
