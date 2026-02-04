@@ -58,18 +58,10 @@ def send_verification_email(email, token):
         <h2>Verify Your Subscription</h2>
         <p>Hello,</p>
         <p>You're receiving this email because someone requested to subscribe to Nick Tapp-Hughes's blog with this email address.</p>
-        <p>To complete your subscription, please click the button below:</p>
-        <p style="margin: 30px 0;">
-            <a href="{verification_url}"
-               style="background-color: #4CAF50; color: white; padding: 14px 28px; text-decoration: none; border-radius: 4px; display: inline-block;">
-                Verify Subscription
-            </a>
-        </p>
-        <p>Or copy and paste this link into your browser:</p>
+        <p>To complete your subscription, please click this link or copy and paste it into your browser:</p>
         <p><a href="{verification_url}">{verification_url}</a></p>
         <p><strong>If you didn't request this subscription, please ignore this email.</strong></p>
         <p>This subscription is free and you can unsubscribe at any time.</p>
-        <p>Best regards,<br>Nick Tapp-Hughes</p>
     </body>
     </html>
     """
@@ -87,9 +79,6 @@ To complete your subscription, please visit this link:
 If you didn't request this subscription, please ignore this email.
 
 This subscription is free and you can unsubscribe at any time.
-
-Best regards,
-Nick Tapp-Hughes
     """
 
     try:
@@ -124,7 +113,6 @@ def send_confirmation_email(email, token):
         <p>If you ever want to unsubscribe, you can do so at any time by clicking the link below:</p>
         <p><a href="{unsubscribe_url}">Unsubscribe</a></p>
         <p>Thank you for subscribing!</p>
-        <p>Best regards,<br>Nick Tapp-Hughes</p>
     </body>
     </html>
     """
@@ -142,9 +130,6 @@ If you ever want to unsubscribe, you can do so at any time by visiting:
 {unsubscribe_url}
 
 Thank you for subscribing!
-
-Best regards,
-Nick Tapp-Hughes
     """
 
     try:
