@@ -57,10 +57,9 @@ def send_verification_email(email, token):
     <body>
         <h2>Verify Your Subscription</h2>
         <p>Hello,</p>
-        <p>You're receiving this email because someone requested to subscribe to Nick Tapp-Hughes's blog with this email address.</p>
+        <p>You're receiving this email because someone requested to subscribe to Nick Tapp-Hughes's blog with this email address. <strong>If you didn't request this subscription, please ignore this email.</strong></p>
         <p>To complete your subscription, please click this link or copy and paste it into your browser:</p>
         <p><a href="{verification_url}">{verification_url}</a></p>
-        <p><strong>If you didn't request this subscription, please ignore this email.</strong></p>
         <p>This subscription is free and you can unsubscribe at any time.</p>
     </body>
     </html>
