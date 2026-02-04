@@ -1,7 +1,3 @@
-New Blog Post Published!
-
-Hello,
-
 A new post has been published on Nick Tapp-Hughes's blog:
 
 {{title}}

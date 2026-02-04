@@ -118,7 +118,7 @@ const textTemplate = readFileSync(join(templateDir, 'email-template.txt'), 'utf-
 new CfnTemplate(notifierLambda, 'BlogPostTemplate', {
   template: {
     templateName: 'BlogPostNotification',
-    subjectPart: 'New blog post: {{title}}',
+    subjectPart: '{{title}}',
     htmlPart: htmlTemplate,
     textPart: textTemplate,
   },
