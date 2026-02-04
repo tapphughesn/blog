@@ -338,7 +338,11 @@ def handle_unsubscribe(query_params):
         item = items[0]
         email = item["emailAddress"]
 
-        # Update subscriber to unsubscribed (keep verifiedStatus=True)
+        # Return early if already unsubscribed (don't update the item)
+        if not item["subscribedStatus"]:
+            return {"statusCode": 200}
+
+        # Update subscriber to unsubscribed (keep verifiedStatus as is)
         now = get_current_timestamp()
         table.update_item(
             Key={"emailAddress": email},
