@@ -47,6 +47,22 @@ def verification_email_cooldown_passed(existing_item, cooldown_minutes=60):
     return elapsed >= cooldown_minutes
 
 
+def confirmation_email_cooldown_passed(existing_item, cooldown_minutes=60):
+    """Check if enough time has passed since the last confirmation email was sent."""
+    if not existing_item:
+        return True
+
+    last_sent = existing_item.get("lastConfirmationEmailSent")
+    if not last_sent:
+        return True
+
+    last_sent_dt = datetime.fromisoformat(last_sent.replace("Z", "+00:00"))
+    now = datetime.now(timezone.utc)
+    elapsed = (now - last_sent_dt).total_seconds() / 60
+
+    return elapsed >= cooldown_minutes
+
+
 def send_verification_email(email, token):
     """Send verification email with verification link."""
     verification_url = f"https://{site_domain}/verify?verificationToken={token}"
@@ -266,21 +282,33 @@ def handle_verify(query_params):
         if item.get("verifiedStatus") and item.get("subscribedStatus"):
             return {"statusCode": 200}
 
+        # Check if confirmation email cooldown has passed (rate limit to prevent abuse)
+        cooldown_passed = confirmation_email_cooldown_passed(item)
+
         # Update subscriber to verified and subscribed with conditional expression
         # This prevents duplicate emails if verification link is clicked multiple times
         now = get_current_timestamp()
+
+        # Build UpdateExpression based on whether we're sending the email
+        update_expr = "SET subscribedStatus = :s, verifiedStatus = :v, verifiedAt = :va, updatedAt = :u"
+        expr_attr_values = {
+            ":s": True,
+            ":v": True,
+            ":va": now,
+            ":u": now,
+            ":false": False,
+        }
+
+        if cooldown_passed:
+            update_expr += ", lastConfirmationEmailSent = :lces"
+            expr_attr_values[":lces"] = now
+
         try:
             table.update_item(
                 Key={"emailAddress": email},
-                UpdateExpression="SET subscribedStatus = :s, verifiedStatus = :v, verifiedAt = :va, updatedAt = :u",
-                ConditionExpression="attribute_not_exists(verifiedStatus) OR verifiedStatus = :false",
-                ExpressionAttributeValues={
-                    ":s": True,
-                    ":v": True,
-                    ":va": now,
-                    ":u": now,
-                    ":false": False,
-                },
+                UpdateExpression=update_expr,
+                ConditionExpression="attribute_not_exists(subscribedStatus) OR subscribedStatus = :false",
+                ExpressionAttributeValues=expr_attr_values,
             )
         except ClientError as e:
             if e.response["Error"]["Code"] == "ConditionalCheckFailedException":
@@ -289,8 +317,9 @@ def handle_verify(query_params):
                 return {"statusCode": 200}
             raise
 
-        # Send confirmation email only if update succeeded
-        send_confirmation_email(email, token)
+        # Send confirmation email only if cooldown has passed
+        if cooldown_passed:
+            send_confirmation_email(email, token)
 
         return {"statusCode": 200}
 

@@ -38,6 +38,8 @@ A DynamoDB table called Subscribers (provisioned by Amplify) will include these 
 * verifiedAt (datetime) -- the most recent time the user was verified
 * lastVerificationEmailSent (datetime) -- the most recent time a verification
   email was sent to the user
+* lastConfirmationEmailSent (datetime) -- the most recent time a confirmation
+  email was sent to the user
 * createdAt (datetime) -- when the record was created
 * updatedAt (datetime) -- when the record was updated
 
@@ -113,7 +115,8 @@ the user of this.
 After verification, if a record was found and updated, Lambda will send a
 request to SES to send an email to the user informing them that they are now
 verified. This email will include an unsubscribe link which also contains their
-verification token.
+verification token. This email will only be send if it has been at least an
+hour since the last confirmation email was sent.
 
 ```mermaid
 ---
