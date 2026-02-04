@@ -12,6 +12,7 @@ dynamodb = boto3.resource("dynamodb")
 table = dynamodb.Table(os.environ["SUBSCRIBERS_TABLE_NAME"])
 ses_client = boto3.client("ses", region_name="us-east-2")
 sender_email = os.environ["SES_SENDER_EMAIL"]
+sender_name = os.environ["SES_SENDER_NAME"]
 site_domain = os.environ["SITE_DOMAIN"]
 
 
@@ -98,7 +99,7 @@ This subscription is free and you can unsubscribe at any time.
 
     try:
         ses_client.send_email(
-            Source=sender_email,
+            Source=f"{sender_name} <{sender_email}>",
             Destination={"ToAddresses": [email]},
             Message={
                 "Subject": {
@@ -149,7 +150,7 @@ Thank you for subscribing!
 
     try:
         ses_client.send_email(
-            Source=sender_email,
+            Source=f"{sender_name} <{sender_email}>",
             Destination={"ToAddresses": [email]},
             Message={
                 "Subject": {

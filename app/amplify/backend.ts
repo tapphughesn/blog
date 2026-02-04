@@ -49,6 +49,9 @@ subscriberLambda.addToRolePolicy(new PolicyStatement({
 // Pass the sender email to the Lambda as an environment variable
 (subscriberLambda as LambdaFunction).addEnvironment('SES_SENDER_EMAIL', 'subscription-manager@nicholastapphughes.com');
 
+// Pass the sender display name to the Lambda as an environment variable
+(subscriberLambda as LambdaFunction).addEnvironment('SES_SENDER_NAME', "Nick Tapp-Hughes's Blog");
+
 // Pass the site domain to the Lambda as an environment variable
 (subscriberLambda as LambdaFunction).addEnvironment('SITE_DOMAIN', 'nicholastapphughes.com');
 
