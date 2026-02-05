@@ -15,11 +15,12 @@ flowchart LR
     SES[SES <br/> <i>Email Delivery</i>]
 
     subgraph DynamoDB [DynamoDB]
-        DB["<b>Subscribers</b> <br/> 🔑 EmailAddress <br/> 🔹 SubscribedStatus <br/> 🔹 VerifiedStatus <br/> 🔹 VerificationToken"]
+        DB["<b>Subscribers</b> <br/> 🔑 emailAddress <br/> 🔹 subscribedStatus <br/> 🔹 VerifiedStatus <br/> 🔹 VerificationToken"]
     end
 
     Amplify -- Deploys --> Server
     Amplify -- Provisions --> DB
+    Amplify -- Provisions --> Lambda
     Server -- API Request --> Lambda
     Lambda -- API Response --> Server
     Lambda -- Query/Update --> DB
@@ -29,13 +30,18 @@ flowchart LR
 ### Data Schema
 
 A DynamoDB table called Subscribers (provisioned by Amplify) will include these fields:
-* EmailAddress (string) (primary key)
-* SubscribedStatus (bool) 
-* VerificationStatus (bool) 
+* emailAddress (string) (primary key)
+* subscribedStatus (bool) 
+* verifiedStatus (bool) 
 * VerificationToken (string)
-* CreatedAt (datetime) -- when the record was created
-* SubscribedAt (datetime) -- the most recent time the user subscribed
-* VerifiedAt (datetime) -- the most recent time the user was verified
+* subscribedAt (datetime) -- the most recent time the user subscribed
+* verifiedAt (datetime) -- the most recent time the user was verified
+* lastVerificationEmailSent (datetime) -- the most recent time a verification
+  email was sent to the user
+* lastConfirmationEmailSent (datetime) -- the most recent time a confirmation
+  email was sent to the user
+* createdAt (datetime) -- when the record was created
+* updatedAt (datetime) -- when the record was updated
 
 ### User Interface
 
@@ -69,13 +75,14 @@ If the subscriber already exists in the Subscriber table and they are subscribed
 If the subscriber does not exist or they are not subscribed (previously
 unsubscribed), then they need to be (re-)verified, to prevent someone from
 maliciously entering emails other than their own:
-* Lambda will generate a unique verification token for the potential subscriber
-  and add/overwrite a record in the Subscribers table with their email address,
-  verification token, subsribed = False, and Verified = False.
-* Lambda will send an email request to SES. The email will include a
-  verification link with the new verification token included as a URL
-  parameter. The email will inform the user that they should not act if they
-  didn't initiate the verification.
+* Lambda will generate a unique verification token for the a new subscriber OR
+  reuse the old verification token for an old subscriber.
+* Lambda will add/overwrite a record in the Subscribers table with their email
+  address, verification token, subsribed = False, and Verified = False.
+* If a verification email was not sent in the last hour, Lambda will send an
+  email request to SES. The email will include a verification link with the new
+  verification token included as a URL parameter. The email will inform the
+  user that they should not act if they didn't initiate the verification.
 * Lambda will send a response to the client and the client will show the user
   that a verification email was sent.
 
@@ -86,9 +93,9 @@ title: Subscribe Button Behavior
 flowchart LR
     button[Click subscribe] -- lambda never responds --> hang([Error: server down, try again later])
     button -- invalid email format --> invalid([Error: invalid format])
-    button -- already subscribed and verified --> subscribed([Message: already subscribed])
-    button -- new subscriber --> verification([Send verification email])
-    button -- previously unsubscribed --> verification([Send verification email])
+    button -- already subscribed and verified --> verification([Conditionally send verification email])
+    button -- new subscriber --> verification
+    button -- previously unsubscribed --> verification
 ```
 
 ### Clicking the Verification Link
@@ -97,7 +104,7 @@ When a user clicks the verification link in their email, they will be routed to
 a page on the website. That page will parse the verification token from the URL
 and send a request to Lambda. Lambda will scan the Subscribers table and look
 for a record that matches the verification token and is unverified. That record
-will have VerificationStatus and SubscribedStatus set to True. Then Lambda will
+will have verifiedStatus and subscribedStatus set to True. Then Lambda will
 send a response to inform the client that verification was a success, and the
 client will tell the user.
 
@@ -108,7 +115,8 @@ the user of this.
 After verification, if a record was found and updated, Lambda will send a
 request to SES to send an email to the user informing them that they are now
 verified. This email will include an unsubscribe link which also contains their
-verification token.
+verification token. This email will only be send if it has been at least an
+hour since the last confirmation email was sent.
 
 ```mermaid
 ---
@@ -131,17 +139,52 @@ later. This email will include an unique unsubscribe link for each subscriber,
 since the unsubscribe link includes the verification token. This will be
 accomplished with SES Templated Emails (SendBulkTemplatedEmail).
 
-### Clicking Unsubscribe Link
+### Clicking the Unsubscribe Link
 
 When a user clicks the unsubscribe link in their email, it takes them to a page
 on my website that works similarly to the verification page. The page parses
 out the verification token and sends a request to Lambda, which scans the
 Subscribers table for a row with that verification token. If a row is found,
-SubscribedStatus will be set to False (VerificationStatus will remain True).
+subscribedStatus will be set to False (verifiedStatus will remain True).
 Lambda will send a response to the client that the unsubscription worked.
 
 If a matching record was not found, then Lambda will send a response that the
 user was not found and the unsubscription did not work.
+
+### Lambda API 
+
+Lambda will handle three HTTP API routes that handle these requests:
+1. Subscribe (POST)
+    * Body contains emailAddress: string (required)
+2. Verify (PATCH /verify?verificationToken=<token>)
+    * No body since all the information is in the HTTP method and query parameter
+3. Unsubscribe (DELETE /unsubscribe?verificationToken=<token>)
+    * No body since all the information is in the HTTP method and query parameter
+
+The Lambda will always try to send responses back to the client. In the case of
+a subscribe request, the response will be one of:
+* 422 unprocessable Entity - The email address was invalid
+* 201 Created - The email address was not already in the table and was added OR
+  the email was in the table but isn't already subscribed OR the record already
+  exists and is subscribed. We can't distinguish between these in the response,
+  or a bad actor could use the responses to determine who is subscribed
+  already. A verification email was sent and records were possibly
+  added/updated.
+* 400 Bad Request - the request was malformed
+
+In the case of a verify request, the response will be one of:
+* 200 Ok - The record was newly verified and subscribed, or it was already
+  verified and subscribed
+* 404 Not Found - The verification token doesn't exist in the table
+* 400 Bad Request - the request was malformed
+
+In the case of a unsubscribe request, the response will be one of:
+* 200 Ok - The record was found subscribedStatus set to false
+* 404 Not Found - The verification token doesn't exist in the table
+* 400 Bad Request - the request was malformed
+
+The responses will not have a body. The client will know what each of the
+response codes mean.
 
 ### Cleaning the Table
 
@@ -156,8 +199,6 @@ too big, I will manually activate this lambda from the AWS Console.
    API rate limiting on the new subscriber workflow.
 2. Add functionality for rotating out the VerificationToken so that it can't be
    brute force guessed by a malicious actor.
-3. Add a secondary index on VerificationToken so that querying the Subscribers
-   table for that token will be fast.
-4. Use DynamoDB's Time To Live (TTL) feature to automatically delete stale new
+3. Use DynamoDB's Time To Live (TTL) feature to automatically delete stale new
    subscriber records, preventing the need for manual flushing.
 

@@ -1,0 +1,9 @@
+A new post has been published on Nick Tapp-Hughes's blog:
+
+{{title}}
+
+Read the full post: {{link}}
+
+---
+You're receiving this email because you subscribed to Nick Tapp-Hughes's blog.
+Unsubscribe: {{unsubscribe_url}}

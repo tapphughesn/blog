@@ -1,6 +1,7 @@
 import "./App.css"
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { SubscribeComponent } from "./blog";
 
 const blogFiles = import.meta.glob('./blog_posts/*.html', { as: 'raw' });
 
@@ -21,7 +22,10 @@ function BlogPost() {
     }
   }, [title]);
 
-  return <div className="blog-post" dangerouslySetInnerHTML={{ __html: content }} />;
+  return <div>
+    <div className="blog-post" dangerouslySetInnerHTML={{ __html: content }} />
+    <SubscribeComponent/>
+  </div>;
 }
 
 export default BlogPost;
