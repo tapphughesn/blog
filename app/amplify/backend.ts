@@ -1,5 +1,4 @@
 import { defineBackend } from '@aws-amplify/backend';
-import { auth } from './auth/resource';
 import { data } from './data/resource';
 import { subscriberHandler } from './functions/subscriber-handler/resource';
 import { blogNotifier } from './functions/blog-notifier/resource';
@@ -14,7 +13,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const backend = defineBackend({
-  auth,
   data,
   subscriberHandler,
   blogNotifier,
