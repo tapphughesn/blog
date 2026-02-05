@@ -14,6 +14,14 @@ Add a button requirement to the verification/unsubscribe pages. Security
 scanners load pages and execute JavaScript, but they **don't click buttons in
 the UI**.
 
+We could do something like cloudflare turnstiles to really be sure that human
+users are interacting with this page, but I want to keep the design here as
+simple as possible. We'll do something more drastic later if it's called for.
+
+There is a slight negative UX impact here since I'm adding a click. I think
+this will be worth it given that the UX of getting automatically
+verified/unsubscribed by your security system is much more negative
+
 ## Changes
 
 ### Files: `src/verify.tsx` and `src/unsubscribe.tsx`
@@ -29,19 +37,16 @@ the UI**.
 - Security scanners don't click the button → no auto-verification, no
   auto-unsubscribe
 
+### File: `src/App.css`
+
+- New styling for new button in "ready" state and "disabled" state
+
 ### Implementation
 
 1. Remove automatic lambda invocations from `useEffect`
 2. Add button with `onClick` handler
 3. Disable button after user clicks, with appropriate styling put into `src/App.css`
 4. After click, show verification status message
-
-## Why This Works
-
-✅ Security scanners load URLs and execute JS, but don't simulate button clicks
-✅ Works on both desktop and mobile (no mouse-specific events) 
-✅ Simple implementation - no external dependencies 
-✅ Minimal UX impact - just one button click
 
 ## Code Changes
 
