@@ -553,6 +553,35 @@ body {
 
 /* #endregion */
 
+/* #region Confirmation */
+
+.confirmation-button {
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: 1px solid #2563eb;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.confirmation-button:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.confirmation-button:disabled {
+  background-color: #9ca3af;
+  border-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* #endregion */
+
 /* #region Footer */
 .footer-content {
   text-align: center;
