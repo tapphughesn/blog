@@ -14,7 +14,15 @@ function Publications() {
           <br />
           "Interior Object Geometry via Fitted Frames,"
           <br />
-          Available: Springer, <a href="https://rdcu.be/eFX0G">https://rdcu.be/eFX0G.</a>
+          Journal of Mathematical Imaging and Vision. Available: Springer, <a href="https://rdcu.be/eFX0G">https://rdcu.be/eFX0G.</a>
+        </li>
+
+        <li>
+          Sarah D. Mills, <strong>Nicholas Tapp-Hughes</strong>, Yu Zhang, Kurt M. Ribisl, Christopher A. Wiesen, Jiaquin Fan, Kristen Hassmiller Lich,
+          <br />
+          "Development and Validation of the Tobacco Use Individual-level Simulation and Tracking (TwIST) Model,"
+          <br />
+          PLoS One. (in press)
         </li>
 
         <li>
