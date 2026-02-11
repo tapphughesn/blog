@@ -97,28 +97,35 @@ notifierLambda.addToRolePolicy(new PolicyStatement({
   resources: ['*'],
 }));
 
+// -------------------------
+// SES bulk email template for blogNotifier
+// -------------------------
+
+// Detect if this is a sandbox deployment
+const isSandbox = backend.stack.stackName.includes('-sandbox-');
+const templateName = 'BlogPostNotification';
+
+// Only create the template in production (not in sandbox)
+if (!isSandbox) {
+  const templateDir = join(__dirname, 'functions', 'blog-notifier');
+  const htmlTemplate = readFileSync(join(templateDir, 'email-template.html'), 'utf-8');
+  const textTemplate = readFileSync(join(templateDir, 'email-template.txt'), 'utf-8');
+
+  new CfnTemplate(notifierLambda, 'BlogPostTemplate', {
+    template: {
+      templateName: templateName,
+      subjectPart: '{{title}}',
+      htmlPart: htmlTemplate,
+      textPart: textTemplate,
+    },
+  });
+}
+
 // Pass environment variables to blog notifier Lambda
+// Both sandbox and production reference the same template name
 (notifierLambda as LambdaFunction).addEnvironment('SUBSCRIBERS_TABLE_NAME', subscribersTable.tableName);
 (notifierLambda as LambdaFunction).addEnvironment('SES_SENDER_EMAIL', 'notifier@nicholastapphughes.com');
 (notifierLambda as LambdaFunction).addEnvironment('SES_SENDER_NAME', "Nick Tapp-Hughes's Blog");
 (notifierLambda as LambdaFunction).addEnvironment('SITE_DOMAIN', 'nicholastapphughes.com');
-(notifierLambda as LambdaFunction).addEnvironment('BLOG_POST_TEMPLATE_NAME', 'BlogPostNotification');
-
-// -------------------------
-// SES bulk email template for blogNotifier 
-// -------------------------
-
-// Create SES email template from files
-const templateDir = join(__dirname, 'functions', 'blog-notifier');
-const htmlTemplate = readFileSync(join(templateDir, 'email-template.html'), 'utf-8');
-const textTemplate = readFileSync(join(templateDir, 'email-template.txt'), 'utf-8');
-
-new CfnTemplate(notifierLambda, 'BlogPostTemplate', {
-  template: {
-    templateName: 'BlogPostNotification',
-    subjectPart: '{{title}}',
-    htmlPart: htmlTemplate,
-    textPart: textTemplate,
-  },
-});
+(notifierLambda as LambdaFunction).addEnvironment('BLOG_POST_TEMPLATE_NAME', templateName);
 
