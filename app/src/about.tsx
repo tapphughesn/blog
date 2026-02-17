@@ -57,7 +57,7 @@ const RightContent = () => {
           Searching for similar problems that have been solved
         </li>
         <li>
-          Organizing information (diagramming, writing a design doc.) to more efficiently hold relevant information
+          Organizing information (diagramming, writing a design doc.) to efficiently hold relevant information
         </li>
         <li>
           Deep-diving into the relevant set of tools/technologies
@@ -69,7 +69,7 @@ const RightContent = () => {
           Explaining to and discussing with coworkers and leaders (if working in an organization); or friends, family, mentors and peers (if working independently)
         </li>
         <li>
-          Taking an idea that is known to be rough or incomplete and trying to implement it anyway
+          Taking an idea that is known to be rough or incomplete and trying to implement it 
         </li>
         <li>
           Exploring a wider set of tools
@@ -88,7 +88,7 @@ const RightContent = () => {
         What I'm Doing Now
       </h1>
       <p className="main-paragraph">
-        In July, I left my role as a software developer at <a href="https://www.epic.com/">Epic</a>. I’m currently traveling in Europe and the US, publishing scientific papers, building this website, writing blog posts, meeting with my mentors, and working on projects. Would you like to contact me? Feel free to reach out.
+        In July, I left my role as a software developer at <a href="https://www.epic.com/">Epic</a>. Since then, I've been traveling in Europe and the US, publishing scientific papers, building this website, writing blog posts, meeting with my mentors, and working on projects. I'm looking for new opportunities! Would you like to contact me? Feel free to reach out.
       </p>
     </div>
   )
