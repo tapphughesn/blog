@@ -22,7 +22,7 @@ function Publications() {
           <br />
           "Development and Validation of the Tobacco Use Individual-level Simulation and Tracking (TwIST) Model,"
           <br />
-          PLoS One. (in press)
+          PLOS One. Available: <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0342083">https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0342083.</a>
         </li>
 
         <li>
