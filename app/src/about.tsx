@@ -44,7 +44,7 @@ const RightContent = () => {
         Who I Am
       </h1>
       <p className="main-paragraph">
-        I'm a software developer and researcher with 4 years of working experience, specializing in building, evaluating, and deploying AI/ML models, developing full-stack web applications, and big data analytics. My primary goal is to align my expertise with hard problems whose solutions are real-word systems.
+        I'm a software developer and researcher with 4 years of working experience, specializing in building, evaluating, and deploying AI/ML models, developing full-stack web applications, and big data analytics. 
       </p>
       <h1 className="main-subheading">
         Solving Problems
