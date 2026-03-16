@@ -2,6 +2,7 @@ import argparse
 import hashlib
 import io
 import os
+from pathlib import Path
 import re
 import sys
 
@@ -20,26 +21,33 @@ SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 
 FOLDER_ID = "1wsrj9cyi2pTuBhn32k-iwQjQLVmWkc61"
 
+REPO_ROOT = Path(__file__).parent.parent
+OUTPUT_DIR = REPO_ROOT / "app" / "src" / "blog-posts"
+IMAGES_DIR = REPO_ROOT / "app" / "public" / "blog-images"
+SECRETS_DIR = Path(__file__).parent / "secrets"
+
 
 def get_credentials():
     creds = None
-    if os.path.exists("secrets/token.json"):
-        creds = Credentials.from_authorized_user_file("secrets/token.json", SCOPES)
+    token_path = SECRETS_DIR / "token.json"
+    credentials_path = SECRETS_DIR / "credentials.json"
+    if token_path.exists():
+        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             try:
                 creds.refresh(Request())
             except RefreshError as e:
                 if "invalid_grant" in str(e):
-                    print("Your secrets/token.json has expired, delete it to regenerate (requires authentication)")
+                    print(f"Your {token_path} has expired, delete it to regenerate (requires authentication)")
                     sys.exit(1)
                 raise
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "secrets/credentials.json", SCOPES
+                credentials_path, SCOPES
             )
             creds = flow.run_local_server(port=0)
-        with open("secrets/token.json", "w") as token:
+        with open(token_path, "w") as token:
             token.write(creds.to_json())
     return creds
 
@@ -52,7 +60,7 @@ def list_docs_in_folder(service, folder_id: str) -> list[dict]:
     return results.get("files", [])
 
 
-def make_image_handler(images_dir: str):
+def make_image_handler(images_dir: Path):
     os.makedirs(images_dir, exist_ok=True)
 
     @mammoth.images.img_element
@@ -96,9 +104,7 @@ def process_doc(service, file_id: str) -> None:
         return
 
     # Convert .docx to HTML
-    output_dir = "../app/src/blog-posts"
-    images_dir = "../app/public/blog-images"
-    result = mammoth.convert_to_html(fh, convert_image=make_image_handler(images_dir))
+    result = mammoth.convert_to_html(fh, convert_image=make_image_handler(IMAGES_DIR))
     html = result.value
     if result.messages:
         print(result.messages)
@@ -160,8 +166,8 @@ def process_doc(service, file_id: str) -> None:
     title = re.sub(r'[^\w_]', '', title)
 
     # Save HTML doc
-    output_path = f"{output_dir}/{title}.html"
-    if os.path.exists(output_path):
+    output_path = OUTPUT_DIR / f"{title}.html"
+    if output_path.exists():
         print(f"Skipping {output_path}, it already exists")
         print("You can delete the data there to recompile the post")
         return
