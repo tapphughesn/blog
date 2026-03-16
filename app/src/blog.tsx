@@ -5,11 +5,11 @@ import { subscribe } from './subscriberApi';
 
 type PostMetadata = { title: string; date: string; isoDate: string; readingTimeMinutes: number };
 
-const postModules = import.meta.glob('./blog-posts/*/index.ts', { eager: true });
+const postModules = import.meta.glob('./blog-posts/*/meta.ts', { eager: true });
 
 const posts: (PostMetadata & { slug: string })[] = Object.entries(postModules)
   .map(([path, mod]: [string, any]) => ({
-    slug: path.replace('./blog-posts/', '').replace('/index.ts', ''),
+    slug: path.replace('./blog-posts/', '').replace('/meta.ts', ''),
     ...(mod.metadata as PostMetadata),
   }))
   .sort((a, b) => b.isoDate.localeCompare(a.isoDate));
@@ -82,7 +82,10 @@ function Blog() {
     <div className="blog-content">
       <div className="blog-top-section">
         <p>
-          Welcome to my blog, where I occasionally write about interesting technical topics.
+          Welcome to my blog, where I occasionally write about interesting technical topics. All the words in this blog are hand-typed by me.
+        </p>
+          <br/>
+        <p>
           If you'd like to be notified about my (free) posts, you can subscribe:
         </p>
         <SubscribeComponent />

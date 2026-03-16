@@ -209,18 +209,19 @@ def write_post(post_dir: Path, entries: list[dict], footnotes: list[tuple[str, s
             index_entries.append(f"  {{ kind: 'component', Component: comp{num} }},")
 
     escaped_title = display_title.replace("'", "\\'")
-    metadata_lines = [
+    meta_lines = [
         "export const metadata = {",
         f"  title: '{escaped_title}',",
         f"  date: '{date_str}',",
         f"  isoDate: '{iso_date}',",
         f"  readingTimeMinutes: {reading_time},",
         "} as const;",
+        "",
     ]
+    (post_dir / "meta.ts").write_text("\n".join(meta_lines))
+
     index_lines = (
         index_imports
-        + [""]
-        + metadata_lines
         + ["", "export const entries = ["]
         + index_entries
         + ["] as const;", ""]
