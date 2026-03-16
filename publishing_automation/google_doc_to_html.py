@@ -16,17 +16,13 @@ import mammoth
 # If modifying scopes, delete the file token.json
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 
+FOLDER_ID = "1wsrj9cyi2pTuBhn32k-iwQjQLVmWkc61"
 
-def main():
-    parser = argparse.ArgumentParser(description="Convert a Google Doc to HTML for the blog")
-    parser.add_argument("file_id", help="Google Doc file ID")
-    args = parser.parse_args()
 
-    # Load saved credentials, if available
+def get_credentials():
     creds = None
     if os.path.exists("secrets/token.json"):
         creds = Credentials.from_authorized_user_file("secrets/token.json", SCOPES)
-    # If no (valid) credentials, prompt login
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
@@ -35,17 +31,24 @@ def main():
                 "secrets/credentials.json", SCOPES
             )
             creds = flow.run_local_server(port=0)
-        # Save the credentials for next time
         with open("secrets/token.json", "w") as token:
             token.write(creds.to_json())
+    return creds
 
-    # Build the Drive API service
-    service = build("drive", "v3", credentials=creds)
 
+def list_docs_in_folder(service, folder_id: str) -> list[dict]:
+    results = service.files().list(
+        q=f"'{folder_id}' in parents and mimeType='application/vnd.google-apps.document' and trashed=false",
+        fields="files(id, name)",
+    ).execute()
+    return results.get("files", [])
+
+
+def process_doc(service, file_id: str) -> None:
     # Download the Google Doc as .docx into memory
     try:
         request = service.files().export_media(
-            fileId=args.file_id,
+            fileId=file_id,
             mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         )
         fh = io.BytesIO()
@@ -56,10 +59,8 @@ def main():
             print(f"Download {int(status.progress() * 100)}%.")
         fh.seek(0)
     except HttpError as e:
-        print(f"Failed to download Google Doc: {e}")
-        sys.exit(1)
-
-    print("Google doc downloaded")
+        print(f"Failed to download {file_id}: {e}")
+        return
 
     # Convert .docx to HTML
     result = mammoth.convert_to_html(fh)
@@ -133,6 +134,28 @@ def main():
         f.write(str(soup))
 
     print(f"Converted to {title}.html")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Convert a Google Doc to HTML for the blog")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("file_id", nargs="?", help="Google Doc file ID")
+    group.add_argument("--folder", action="store_true", help="Process all docs in the blog posts folder")
+    args = parser.parse_args()
+
+    service = build("drive", "v3", credentials=get_credentials())
+
+    if args.folder:
+        docs = list_docs_in_folder(service, FOLDER_ID)
+        if not docs:
+            print("No Google Docs found in folder")
+            sys.exit(0)
+        print(f"Found {len(docs)} doc(s) in folder")
+        for doc in docs:
+            print(f"\nProcessing: {doc['name']}")
+            process_doc(service, doc["id"])
+    else:
+        process_doc(service, args.file_id)
 
 
 if __name__ == "__main__":
