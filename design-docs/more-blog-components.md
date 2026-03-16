@@ -170,9 +170,9 @@ Quotes will be rendered in HTML as a `<p>` with a special classname like
 
 #### Quality of Life Improvements
 
-The python script will be renamed something like
-`compile_blog_post_from_google_doc.py`. It will use the `uv` package manager.
-It will run as a module and take arguments, including the google document ID. 
+The python script will be renamed something like `compile_blog_posts.py`. It
+will use the `uv` package manager. It will run as a module and take arguments,
+including the google document ID. 
 
 The python script will allow for compiling all the google docs within a folder,
 therefore bypassing the need to copy a document ID.
