@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import io
 import os
 import re
@@ -44,6 +45,31 @@ def list_docs_in_folder(service, folder_id: str) -> list[dict]:
     return results.get("files", [])
 
 
+def make_image_handler(images_dir: str):
+    os.makedirs(images_dir, exist_ok=True)
+
+    @mammoth.images.img_element
+    def handle_image(image):
+        with image.open() as f:
+            data = f.read()
+
+        ext = image.content_type.split(";")[0].strip().split("/")[-1]
+        if ext == "jpeg":
+            ext = "jpg"
+
+        digest = hashlib.sha256(data).hexdigest()[:16]
+        filename = f"{digest}.{ext}"
+        dest = os.path.join(images_dir, filename)
+
+        if not os.path.exists(dest):
+            with open(dest, "wb") as out:
+                out.write(data)
+
+        return {"src": f"./images/{filename}"}
+
+    return handle_image
+
+
 def process_doc(service, file_id: str) -> None:
     # Download the Google Doc as .docx into memory
     try:
@@ -63,7 +89,9 @@ def process_doc(service, file_id: str) -> None:
         return
 
     # Convert .docx to HTML
-    result = mammoth.convert_to_html(fh)
+    output_dir = "../app/src/blog_posts"
+    images_dir = os.path.join(output_dir, "images")
+    result = mammoth.convert_to_html(fh, convert_image=make_image_handler(images_dir))
     html = result.value
     if result.messages:
         print(result.messages)
@@ -125,7 +153,7 @@ def process_doc(service, file_id: str) -> None:
     title = re.sub(r'[^\w_]', '', title)
 
     # Save HTML doc
-    output_path = f"../app/src/blog_posts/{title}.html"
+    output_path = f"{output_dir}/{title}.html"
     if os.path.exists(output_path):
         print(f"Skipping {output_path}, it already exists")
         print("You can delete the data there to recompile the post")
