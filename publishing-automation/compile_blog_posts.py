@@ -276,7 +276,7 @@ def process_doc(service, file_id: str) -> None:
     reading_time = calculate_reading_time(entries)
     write_post(post_dir, entries, footnotes, display_title, date_str, iso_date, reading_time)
 
-    print(f"Compiled {title}/ ({len(entries)} segment(s))")
+    print(f"Compiled {slug}/ ({len(entries)} segment(s))")
 
 
 def main():
