@@ -174,6 +174,9 @@ The python script will be renamed something like
 `compile_blog_post_from_google_doc.py`. It will use the `uv` package manager.
 It will run as a module and take arguments, including the google document ID. 
 
+The python script will allow for compiling all the google docs within a folder,
+therefore bypassing the need to copy a document ID.
+
 The python script will also show a warning if the blog post already exists, and
 will not overwrite existing blog posts. This prevents overwriting any manual
 work that was done.
@@ -181,7 +184,7 @@ work that was done.
 I will create an example blog post that shows off all the features of the
 compiler.
 
-I'll consider refactoring the Python script into multiple files if needed.
+I'll refactor the Python script into multiple functions.
 
 #### Manual Publishing Workflow
 
@@ -192,27 +195,25 @@ TODOs. Then, the author can go and implement all of those.
 ### New Blog Rendering System
 
 The python script has to take `<p>` elements that contain text like [<component
-name>: <content string>] and translate them. This is not too hard, we just need
-to add some steps to the algorithm:
+name>: <content string>] and translate them. This will require some changes to
+the processing in the python script:
 
-1. Uses my Google developer credentials and the document ID to download the
-   google doc as a .docx file
-2. Loads the .docx into memory and deletes it from disk
-3. Uses the `mammoth` python package to convert the .docx to HTML
-4. **NEW:** Make sure that images are rendered correctly (TODO: try this and then update doc)
-5. Processes the HTML with the `beautifulsoup` python package: 
-    * Cleans up empty links (`<a>` tags), which exist for some reason
-    * Extracts the title of the blog post
-    * **NEW:** Loops over all `<p>` elements to see if they are the form of a
-      math, quote, or interactive component, then replaces them with the
-      appropriate HTML
-        * If interactive component, render a placeholder <interactive/> in the
-          HTML, and create a local `<num>.tsx` file
-    * Finds all the footnotes, which are indicated with the "[number]" syntax
-      (within a <p> element) in the Google Doc, moves the footnotes to the
-      bottom with appropriate reference linking
-    * **NEW:** Break up the HTML document into multiple documents, split by the
-      <interactive/> components.
-6. **NEW:** Build the `index.ts` file based on the documents in memory.
-7. **NEW:** Save `index.ts` and all the HTML and TSX documents in
-   `blog/app/src/blog_posts/title`.
+TODO: revise this when the algo is actually implemented
+
+1. Cleans up empty links (`<a>` tags), which exist for some reason
+2. Extracts the title of the blog post
+3. **NEW:** Loops over all `<p>` elements to see if they are the form of a
+   math, quote, or interactive component, then replaces them with the
+   appropriate HTML
+    * If interactive component, render a placeholder <interactive/> in the
+      HTML, and create a local `<num>.tsx` file
+5. Finds all the footnotes, which are indicated with the "[number]" syntax
+(within a <p> element) in the Google Doc, moves the footnotes to the bottom
+with appropriate reference linking
+6. **NEW:** Break up the HTML document into multiple documents, split by the
+<interactive/> components.
+
+There will also be significant QoL changes to the Python script, and the usual
+orchestration for Google developer credentials, pulling down google docs, and
+writing to disk.
+
