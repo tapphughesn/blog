@@ -83,6 +83,12 @@ function Blog() {
             <span>October 12<sup>th</sup> 2025 &middot; 5 minute read</span>
           </div>
         </Link>
+        <Link className="post-link" to="/blog/an-example-blog-post">
+          <div className="blog-listing">
+            <h3> An Example Blog Post</h3>
+            <span>March 16<sup>th</sup> 2026 &middot; 1 minute read</span>
+          </div>
+        </Link>
       </div>
     </div >
   );
