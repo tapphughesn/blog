@@ -124,7 +124,12 @@ def main():
     title = re.sub(r'[^\w_]', '', title)
 
     # Save HTML doc
-    with open(f"../app/src/blog_posts/{title}.html", "w") as f:
+    output_path = f"../app/src/blog_posts/{title}.html"
+    if os.path.exists(output_path):
+        print(f"Skipping {output_path}, it already exists")
+        print("You can delete the data there to recompile the post")
+        return
+    with open(output_path, "w") as f:
         f.write(str(soup))
 
     print(f"Converted to {title}.html")
