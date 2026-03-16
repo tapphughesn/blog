@@ -3,6 +3,17 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { subscribe } from './subscriberApi';
 
+type PostMetadata = { title: string; date: string; isoDate: string; readingTimeMinutes: number };
+
+const postModules = import.meta.glob('./blog-posts/*/index.ts', { eager: true });
+
+const posts: (PostMetadata & { slug: string })[] = Object.entries(postModules)
+  .map(([path, mod]: [string, any]) => ({
+    slug: path.replace('./blog-posts/', '').replace('/index.ts', ''),
+    ...(mod.metadata as PostMetadata),
+  }))
+  .sort((a, b) => b.isoDate.localeCompare(a.isoDate));
+
 export function SubscribeComponent() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -77,18 +88,14 @@ function Blog() {
         <SubscribeComponent />
       </div>
       <div className="blog-list">
-        <Link className="post-link" to="/blog/why_write_blog_posts">
-          <div className="blog-listing">
-            <h3> Why Write Blog Posts?</h3>
-            <span>October 12<sup>th</sup> 2025 &middot; 5 minute read</span>
-          </div>
-        </Link>
-        <Link className="post-link" to="/blog/an_example_blog_post">
-          <div className="blog-listing">
-            <h3> An Example Blog Post</h3>
-            <span>March 16<sup>th</sup> 2026 &middot; 1 minute read</span>
-          </div>
-        </Link>
+        {posts.map(post => (
+          <Link key={post.slug} className="post-link" to={`/blog/${post.slug}`}>
+            <div className="blog-listing">
+              <h3>{post.title}</h3>
+              <span>{post.date} &middot; {post.readingTimeMinutes} minute read</span>
+            </div>
+          </Link>
+        ))}
       </div>
     </div >
   );

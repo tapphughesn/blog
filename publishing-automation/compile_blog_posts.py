@@ -163,7 +163,7 @@ def build_entries(soup: BeautifulSoup) -> tuple[list[dict], list[tuple[str, str]
     return entries, footnotes
 
 
-def write_post(post_dir: Path, entries: list[dict], footnotes: list[tuple[str, str]], date_str: str, reading_time: int) -> None:
+def write_post(post_dir: Path, entries: list[dict], footnotes: list[tuple[str, str]], display_title: str, date_str: str, iso_date: str, reading_time: int) -> None:
     """Write numbered HTML/TSX files and index.ts to post_dir."""
     post_dir.mkdir(parents=True, exist_ok=True)
 
@@ -208,9 +208,12 @@ def write_post(post_dir: Path, entries: list[dict], footnotes: list[tuple[str, s
             index_imports.append(f"import comp{num} from './{num}';")
             index_entries.append(f"  {{ kind: 'component', Component: comp{num} }},")
 
+    escaped_title = display_title.replace("'", "\\'")
     metadata_lines = [
         "export const metadata = {",
+        f"  title: '{escaped_title}',",
         f"  date: '{date_str}',",
+        f"  isoDate: '{iso_date}',",
         f"  readingTimeMinutes: {reading_time},",
         "} as const;",
     ]
@@ -254,20 +257,23 @@ def process_doc(service, file_id: str) -> None:
     h1 = soup.find("h1")
     if not h1:
         raise ValueError("Blog post has no h1 title")
-    title = h1.get_text(strip=True).lower()
-    title = re.sub(r'\s+', '_', title)
-    title = re.sub(r'[^\w_]', '', title)
+    display_title = h1.get_text(strip=True)
+    slug = display_title.lower()
+    slug = re.sub(r'\s+', '_', slug)
+    slug = re.sub(r'[^\w_]', '', slug)
 
-    post_dir = OUTPUT_DIR / title
+    post_dir = OUTPUT_DIR / slug
     if post_dir.exists():
         print(f"Skipping {post_dir}, it already exists")
         print("You can delete it to recompile the post")
         return
 
     entries, footnotes = build_entries(soup)
-    date_str = format_date(datetime.date.today())
+    today = datetime.date.today()
+    date_str = format_date(today)
+    iso_date = today.isoformat()
     reading_time = calculate_reading_time(entries)
-    write_post(post_dir, entries, footnotes, date_str, reading_time)
+    write_post(post_dir, entries, footnotes, display_title, date_str, iso_date, reading_time)
 
     print(f"Compiled {title}/ ({len(entries)} segment(s))")
 

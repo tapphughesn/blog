@@ -1,7 +1,9 @@
 import html01 from './01.html?raw';
 
 export const metadata = {
-  date: 'March 16th, 2026',
+  title: 'Why Write Blog Posts?',
+  date: 'October 12th, 2025',
+  isoDate: '2025-10-12',
   readingTimeMinutes: 6,
 } as const;
 
