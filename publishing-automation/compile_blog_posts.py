@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 import sys
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString, Tag
 from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -25,6 +25,7 @@ REPO_ROOT = Path(__file__).parent.parent
 OUTPUT_DIR = REPO_ROOT / "app" / "src" / "blog-posts"
 IMAGES_DIR = REPO_ROOT / "app" / "public" / "blog-images"
 SECRETS_DIR = Path(__file__).parent / "secrets"
+COMPONENT_TEMPLATE = Path(__file__).parent / "component_template.tsx"
 
 
 def get_credentials():
@@ -85,6 +86,116 @@ def make_image_handler(images_dir: Path):
     return handle_image
 
 
+def build_entries(soup: BeautifulSoup) -> tuple[list[dict], list[tuple[str, str]]]:
+    """
+    Process soup and split into a sequence of HTML and component entries.
+
+    Returns (entries, footnotes) where entries is a list of:
+      {"kind": "html",      "tags": [Tag | NavigableString, ...]}
+      {"kind": "component", "descriptor": str}
+    and footnotes is a list of (num, text) pairs.
+    """
+    # Clean empty <a> tags
+    for a in soup.find_all("a"):
+        if str(a.attrs.get("id", "")).startswith("_"):
+            a.decompose()
+
+    # Collect and remove footnote definition paragraphs
+    footnotes: list[tuple[str, str]] = []
+    for p in soup.find_all("p"):
+        raw = p.decode_contents().strip()
+        match = re.match(r'\[(\d+)\]\s*(.*)', raw, re.DOTALL)
+        if match:
+            num, text = match.groups()
+            footnotes.append((num, text))
+            p.decompose()
+
+    # Replace inline footnote references [1] -> <sup>
+    def repl(m):
+        num = m.group(1)
+        return f'<sup id="fnref{num}" class="footnote-ref"><a href="#fn{num}">{num}</a></sup>'
+
+    for p in soup.find_all("p"):
+        new_html = re.sub(r'\[(\d+)\]', repl, p.decode_contents())
+        p.clear()
+        p.append(BeautifulSoup(new_html, "html.parser"))
+
+    # Walk top-level elements, splitting on [Component: ...] paragraphs
+    entries: list[dict] = []
+    html_buffer: list = []
+
+    for element in list(soup.contents):
+        if isinstance(element, Tag) and element.name == "p":
+            text = element.get_text(strip=True)
+            comp_match = re.fullmatch(r'\[Component:\s*(.*)\]', text, re.DOTALL)
+            if comp_match:
+                if html_buffer:
+                    entries.append({"kind": "html", "tags": html_buffer})
+                    html_buffer = []
+                entries.append({"kind": "component", "descriptor": comp_match.group(1).strip()})
+                continue
+        html_buffer.append(element)
+
+    if html_buffer:
+        entries.append({"kind": "html", "tags": html_buffer})
+
+    return entries, footnotes
+
+
+def write_post(post_dir: Path, entries: list[dict], footnotes: list[tuple[str, str]]) -> None:
+    """Write numbered HTML/TSX files and index.ts to post_dir."""
+    post_dir.mkdir(parents=True, exist_ok=True)
+
+    # Append footnotes section to the last HTML entry
+    if footnotes:
+        last_html = next((e for e in reversed(entries) if e["kind"] == "html"), None)
+        if last_html is not None:
+            scratch = BeautifulSoup("", "html.parser")
+            scratch.append(scratch.new_tag("hr"))
+            h2 = scratch.new_tag("h2")
+            h2.append("Footnotes")
+            scratch.append(h2)
+            ol = scratch.new_tag("ol", attrs={"class": "footnotes"})
+            for num, text in footnotes:
+                li = scratch.new_tag("li", id=f"fn{num}")
+                li.append(BeautifulSoup(text, "html.parser"))
+                back = scratch.new_tag("a", href=f"#fnref{num}", attrs={"class": "footnote-backref"})
+                back.string = "↩︎"
+                li.append(back)
+                ol.append(li)
+            scratch.append(ol)
+            last_html["tags"].extend(list(scratch.contents))
+
+    component_template = COMPONENT_TEMPLATE.read_text()
+
+    index_imports: list[str] = []
+    index_entries: list[str] = []
+
+    for i, entry in enumerate(entries, start=1):
+        num = f"{i:02d}"
+        if entry["kind"] == "html":
+            (post_dir / f"{num}.html").write_text("".join(str(tag) for tag in entry["tags"]))
+            index_imports.append(f"import html{num} from './{num}.html?raw';")
+            index_entries.append(f"  {{ kind: 'html',      content: html{num} }},")
+        else:
+            tsx_content = (
+                component_template
+                .replace("{{name}}", f"comp{num}")
+                .replace("{{descriptor}}", entry["descriptor"])
+            )
+            (post_dir / f"{num}.tsx").write_text(tsx_content)
+            index_imports.append(f"import comp{num} from './{num}';")
+            index_entries.append(f"  {{ kind: 'component', Component: comp{num} }},")
+
+    index_lines = (
+        index_imports
+        + ["", "export const entries = ["]
+        + index_entries
+        + ["] as const;", ""]
+    )
+    (post_dir / "index.ts").write_text("\n".join(index_lines))
+
+
 def process_doc(service, file_id: str) -> None:
     # Download the Google Doc as .docx into memory
     try:
@@ -105,76 +216,29 @@ def process_doc(service, file_id: str) -> None:
 
     # Convert .docx to HTML
     result = mammoth.convert_to_html(fh, convert_image=make_image_handler(IMAGES_DIR))
-    html = result.value
     if result.messages:
         print(result.messages)
 
-    # Clean empty <a> tags
-    soup = BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(result.value, "html.parser")
 
-    for a in soup.find_all("a"):
-        if str(a.attrs.get("id", "")).startswith("_"):
-            a.decompose()
-
-    # Transform footnotes to HTML-friendly elements
-    footnotes = []
-
-    # Find footnote paragraphs and store them
-    for p in soup.find_all("p"):
-        raw = p.decode_contents().strip()
-        match = re.match(r'\[(\d+)\]\s*(.*)', raw, re.DOTALL)
-        if match:
-            num, text = match.groups()
-            footnotes.append((num, text))
-            p.decompose()
-
-    # Replace inline references
-    def repl(m):
-        num = m.group(1)
-        return f'<sup id="fnref{num}" class="footnote-ref"><a href="#fn{num}">{num}</a></sup>'
-
-    for p in soup.find_all("p"):
-        new_html = re.sub(r'\[(\d+)\]', repl, p.decode_contents())
-        p.clear()
-        p.append(BeautifulSoup(new_html, "html.parser"))
-
-    # Add footnotes at the bottom
-    if footnotes:
-        soup.append(soup.new_tag("hr"))
-
-        h2 = soup.new_tag("h2")
-        h2.append("Footnotes")
-        soup.append(h2)
-
-        ol = soup.new_tag("ol", attrs={"class": "footnotes"})
-        for num, text in footnotes:
-            li = soup.new_tag("li", id=f"fn{num}")
-            li.append(BeautifulSoup(text, "html.parser"))
-            back = soup.new_tag("a", href=f"#fnref{num}", attrs={"class": "footnote-backref"})
-            back.string = "↩︎"
-            li.append(back)
-            ol.append(li)
-        soup.append(ol)
-
-    # Get the title of the blog post
+    # Extract title
     h1 = soup.find("h1")
     if not h1:
         raise ValueError("Blog post has no h1 title")
-    title = h1.get_text(strip=True)
-    title = title.lower()
+    title = h1.get_text(strip=True).lower()
     title = re.sub(r'\s+', '_', title)
     title = re.sub(r'[^\w_]', '', title)
 
-    # Save HTML doc
-    output_path = OUTPUT_DIR / f"{title}.html"
-    if output_path.exists():
-        print(f"Skipping {output_path}, it already exists")
-        print("You can delete the data there to recompile the post")
+    post_dir = OUTPUT_DIR / title
+    if post_dir.exists():
+        print(f"Skipping {post_dir}, it already exists")
+        print("You can delete it to recompile the post")
         return
-    with open(output_path, "w") as f:
-        f.write(str(soup))
 
-    print(f"Converted to {title}.html")
+    entries, footnotes = build_entries(soup)
+    write_post(post_dir, entries, footnotes)
+
+    print(f"Compiled {title}/ ({len(entries)} segment(s))")
 
 
 def main():
