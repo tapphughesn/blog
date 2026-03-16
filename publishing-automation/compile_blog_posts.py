@@ -96,7 +96,7 @@ def process_doc(service, file_id: str) -> None:
         return
 
     # Convert .docx to HTML
-    output_dir = "../app/src/blog_posts"
+    output_dir = "../app/src/blog-posts"
     images_dir = os.path.join(output_dir, "images")
     result = mammoth.convert_to_html(fh, convert_image=make_image_handler(images_dir))
     html = result.value

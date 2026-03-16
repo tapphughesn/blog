@@ -77,7 +77,7 @@ function Blog() {
         <SubscribeComponent />
       </div>
       <div className="blog-list">
-        <Link className="post-link" to="/blog/why_write_blog_posts">
+        <Link className="post-link" to="/blog/why_write_blog-posts">
           <div className="blog-listing">
             <h3> Why Write Blog Posts?</h3>
             <span>October 12<sup>th</sup> 2025 &middot; 5 minute read</span>

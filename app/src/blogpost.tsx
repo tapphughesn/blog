@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SubscribeComponent } from "./blog";
 
-const blogFiles = import.meta.glob('./blog_posts/*.html', { query: '?raw', import: 'default' });
+const blogFiles = import.meta.glob('./blog-posts/*.html', { query: '?raw', import: 'default' });
 
 function BlogPost() {
   const { title } = useParams<{ title: string }>();
@@ -13,7 +13,7 @@ function BlogPost() {
   useEffect(() => {
     if (!title) return;
 
-    const path = `./blog_posts/${title}.html`;
+    const path = `./blog-posts/${title}.html`;
     const loader = blogFiles[path];
 
     if (loader) {
