@@ -166,7 +166,7 @@ def process_doc(service, file_id: str) -> None:
         print("You can delete the data there to recompile the post")
         return
     with open(output_path, "w") as f:
-        f.write(soup.prettify())
+        f.write(str(soup))
 
     print(f"Converted to {title}.html")
 
