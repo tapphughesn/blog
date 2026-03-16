@@ -113,6 +113,12 @@ body {
   margin: 1rem;
 }
 
+.blog-post img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
 .subscribe-container {
   display: flex;
   justify-content: center;

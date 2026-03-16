@@ -72,7 +72,7 @@ def make_image_handler(images_dir: str):
             with open(dest, "wb") as out:
                 out.write(data)
 
-        return {"src": f"./images/{filename}"}
+        return {"src": f"/blog-images/{filename}"}
 
     return handle_image
 
@@ -97,7 +97,7 @@ def process_doc(service, file_id: str) -> None:
 
     # Convert .docx to HTML
     output_dir = "../app/src/blog-posts"
-    images_dir = os.path.join(output_dir, "images")
+    images_dir = "../app/public/blog-images"
     result = mammoth.convert_to_html(fh, convert_image=make_image_handler(images_dir))
     html = result.value
     if result.messages:
