@@ -17,7 +17,7 @@ function BlogPost() {
     const loader = blogFiles[path];
 
     if (loader) {
-      loader().then((html: string) => setContent(html));
+      loader().then((html) => setContent(html as string));
     } else {
       setContent(`<p>Post ${title} not found.</p>`);
     }
