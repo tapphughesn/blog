@@ -1,4 +1,5 @@
 import "./App.css"
+import 'katex/dist/katex.min.css'
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SubscribeComponent } from "./blog";

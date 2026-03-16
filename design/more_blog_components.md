@@ -128,9 +128,8 @@ This means that each math component needs to manually coded in TeX by hand, in
 place of the 'TODO' default.
 
 KaTeX will be added as a dependency, and vite will build the static math
-components. The needed styling will be loaded dynamically from a CDN whenever
-the Blog or BlogPost components are rendered (I don't want to be billed for the
-network bandwith of sending that styling to every user).
+components. The needed styling and fonts will be packaged with the bundle and
+dynamically loaded.
 
 #### Handling Interactive Components
 
