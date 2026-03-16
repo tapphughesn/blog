@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import hashlib
 import io
 import os
@@ -86,6 +87,26 @@ def make_image_handler(images_dir: Path):
     return handle_image
 
 
+def ordinal(n: int) -> str:
+    suffix = "th" if 11 <= n % 100 <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
+
+
+def format_date(date: datetime.date) -> str:
+    return date.strftime(f"%B {ordinal(date.day)}, %Y")
+
+
+def calculate_reading_time(entries: list[dict]) -> int:
+    """Estimate reading time in minutes at 200 wpm across all HTML entries."""
+    words = 0
+    for entry in entries:
+        if entry["kind"] == "html":
+            for tag in entry["tags"]:
+                if isinstance(tag, Tag):
+                    words += len(tag.get_text().split())
+    return max(1, -(-words // 200))  # ceiling division
+
+
 def build_entries(soup: BeautifulSoup) -> tuple[list[dict], list[tuple[str, str]]]:
     """
     Process soup and split into a sequence of HTML and component entries.
@@ -142,7 +163,7 @@ def build_entries(soup: BeautifulSoup) -> tuple[list[dict], list[tuple[str, str]
     return entries, footnotes
 
 
-def write_post(post_dir: Path, entries: list[dict], footnotes: list[tuple[str, str]]) -> None:
+def write_post(post_dir: Path, entries: list[dict], footnotes: list[tuple[str, str]], date_str: str, reading_time: int) -> None:
     """Write numbered HTML/TSX files and index.ts to post_dir."""
     post_dir.mkdir(parents=True, exist_ok=True)
 
@@ -187,8 +208,16 @@ def write_post(post_dir: Path, entries: list[dict], footnotes: list[tuple[str, s
             index_imports.append(f"import comp{num} from './{num}';")
             index_entries.append(f"  {{ kind: 'component', Component: comp{num} }},")
 
+    metadata_lines = [
+        "export const metadata = {",
+        f"  date: '{date_str}',",
+        f"  readingTimeMinutes: {reading_time},",
+        "} as const;",
+    ]
     index_lines = (
         index_imports
+        + [""]
+        + metadata_lines
         + ["", "export const entries = ["]
         + index_entries
         + ["] as const;", ""]
@@ -236,7 +265,9 @@ def process_doc(service, file_id: str) -> None:
         return
 
     entries, footnotes = build_entries(soup)
-    write_post(post_dir, entries, footnotes)
+    date_str = format_date(datetime.date.today())
+    reading_time = calculate_reading_time(entries)
+    write_post(post_dir, entries, footnotes, date_str, reading_time)
 
     print(f"Compiled {title}/ ({len(entries)} segment(s))")
 

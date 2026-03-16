@@ -4,7 +4,7 @@ TODO: implement this
 */
 export default function {{name}}() {
   return (
-    <div>
+    <div className="blog-post-interactive-component">
       TODO: replace this example component
     </div>
   );

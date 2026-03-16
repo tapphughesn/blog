@@ -99,7 +99,7 @@ body {
   margin-top: 4rem;
 }
 
-.blog-post > span {
+.blog-post > div > span {
   display: block;
   text-align: center;
   font-size: 0.8rem;
