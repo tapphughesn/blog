@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import sys
 
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import BeautifulSoup, Comment, NavigableString, Tag
 from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -148,6 +148,7 @@ def build_entries(soup: BeautifulSoup) -> tuple[list[dict], list[tuple[str, str]
     for element in list(soup.contents):
         if isinstance(element, Tag) and element.name == "p":
             text = element.get_text(strip=True)
+
             comp_match = re.fullmatch(r'\[Component:\s*(.*)\]', text, re.DOTALL)
             if comp_match:
                 if html_buffer:
@@ -155,6 +156,25 @@ def build_entries(soup: BeautifulSoup) -> tuple[list[dict], list[tuple[str, str]
                     html_buffer = []
                 entries.append({"kind": "component", "descriptor": comp_match.group(1).strip()})
                 continue
+
+            quote_match = re.fullmatch(r'\[Quote:\s*(.*)\]', text, re.DOTALL | re.IGNORECASE)
+            if quote_match:
+                element.attrs = {"class": "blog-post-quote"}
+                element.clear()
+                element.append(quote_match.group(1).strip())
+                html_buffer.append(element)
+                continue
+
+            tex_match = re.fullmatch(r'\[TeX:\s*(.*)\]', text, re.DOTALL | re.IGNORECASE)
+            if tex_match:
+                descriptor = tex_match.group(1).strip()
+                replacement = BeautifulSoup(
+                    f'<!-- TeX: {descriptor} --><tex display>TODO</tex>',
+                    "html.parser",
+                )
+                html_buffer.extend(list(replacement.contents))
+                continue
+
         html_buffer.append(element)
 
     if html_buffer:
@@ -195,7 +215,11 @@ def write_post(post_dir: Path, entries: list[dict], footnotes: list[tuple[str, s
     for i, entry in enumerate(entries, start=1):
         num = f"{i:02d}"
         if entry["kind"] == "html":
-            (post_dir / f"{num}.html").write_text("".join(str(tag) for tag in entry["tags"]))
+            html = "".join(
+                f'<!--{tag}-->' if isinstance(tag, Comment) else str(tag)
+                for tag in entry["tags"]
+            ).replace(' display=""', ' display')  # BS4 normalizes boolean attrs to attr=""; undo that for <tex display>
+            (post_dir / f"{num}.html").write_text(html)
             index_imports.append(f"import html{num} from './{num}.html?raw';")
             index_entries.append(f"  {{ kind: 'html',      content: html{num} }},")
         else:

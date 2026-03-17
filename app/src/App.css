@@ -106,6 +106,17 @@ body {
   margin-bottom: 3rem;
 }
 
+.blog-post-interactive-component {
+  display: flex;
+  justify-content: center;
+}
+
+.blog-post-quote {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 1.5rem 2rem;
+}
+
 .blog-post hr {
   border: none;
   border-bottom: 1px solid #e5e7eb;

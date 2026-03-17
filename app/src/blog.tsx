@@ -12,6 +12,7 @@ const posts: (PostMetadata & { slug: string })[] = Object.entries(postModules)
     slug: path.replace('./blog-posts/', '').replace('/meta.ts', ''),
     ...(mod.metadata as PostMetadata),
   }))
+  .filter(post => post.slug !== 'an_example_blog_post')
   .sort((a, b) => b.isoDate.localeCompare(a.isoDate));
 
 export function SubscribeComponent() {

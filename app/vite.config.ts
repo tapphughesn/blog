@@ -12,7 +12,7 @@ function katexBuildPlugin(): Plugin {
     name: 'katex-build',
     enforce: 'pre',
     load(id) {
-      if (!id.includes('/blog_posts/') || !id.endsWith('.html?raw')) return
+      if (!id.includes('/blog-posts/') || !id.endsWith('.html?raw')) return
       const filePath = id.replace('?raw', '')
       const html = readFileSync(filePath, 'utf-8')
       const processed = html
