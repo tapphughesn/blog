@@ -3,6 +3,18 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { subscribe } from './subscriberApi';
 
+type PostMetadata = { title: string; date: string; isoDate: string; readingTimeMinutes: number };
+
+const postModules = import.meta.glob('./blog-posts/*/meta.ts', { eager: true });
+
+const posts: (PostMetadata & { slug: string })[] = Object.entries(postModules)
+  .map(([path, mod]: [string, any]) => ({
+    slug: path.replace('./blog-posts/', '').replace('/meta.ts', ''),
+    ...(mod.metadata as PostMetadata),
+  }))
+  .filter(post => post.slug !== 'an_example_blog_post')
+  .sort((a, b) => b.isoDate.localeCompare(a.isoDate));
+
 export function SubscribeComponent() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -71,18 +83,23 @@ function Blog() {
     <div className="blog-content">
       <div className="blog-top-section">
         <p>
-          Welcome to my blog, where I occasionally write about interesting technical topics.
+          Welcome to my blog, where I occasionally write about interesting technical topics. All the words in this blog are hand-typed by me.
+        </p>
+          <br/>
+        <p>
           If you'd like to be notified about my (free) posts, you can subscribe:
         </p>
         <SubscribeComponent />
       </div>
       <div className="blog-list">
-        <Link className="post-link" to="/blog/why_write_blog_posts">
-          <div className="blog-listing">
-            <h3> Why Write Blog Posts?</h3>
-            <span>October 12<sup>th</sup> 2025 &middot; 5 minute read</span>
-          </div>
-        </Link>
+        {posts.map(post => (
+          <Link key={post.slug} className="post-link" to={`/blog/${post.slug}`}>
+            <div className="blog-listing">
+              <h3>{post.title}</h3>
+              <span>{post.date} &middot; {post.readingTimeMinutes} minute read</span>
+            </div>
+          </Link>
+        ))}
       </div>
     </div >
   );
