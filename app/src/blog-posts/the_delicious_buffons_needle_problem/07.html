@@ -1,1 +1,39 @@
-<p>Is this method of estimating pi any good? No, not really--much better methods of estimating pi exist. The expected value of this estimator is exactly pi, but its variance (the calculation of which I’ll leave as an exercise for the reader) leaves much to be desired. Nevermind the fact that we have great ways of calculating digits of pi directly. </p><p>We can improve this estimator, however, by incorporating a little bit of a priori knowledge. It is well known that 355/113 is a good approximation of pi (accurate to six decimal places). For a bit of fun, try setting the number of needles to 355, and see if you can get 113 crossings. If you were open to a bit of deceit, you could use this experimental result to exaggerate the efficacy of this method of estimating pi. Surely no one would do such a thing!</p><h2>Historical Hogwash</h2><p>Academic fraud, despite being ever more relevant, is not a problem of the mere present. In the early 20th century, the Italian mathematician Mario Lazzarini claimed to have physically set up the Buffon’s Needle Problem experiment with l = 2.5 cm, d = 3 cm, and the number of needle droppings = 3408. He counted 1808 crossings, thus giving the approximation:</p><!-- TeX: pi \approx 2l(num needles) / d(num crossings) = 2 * 2.5 * 3408 / 3 * 1808 = 355/113 --><tex display>TODO</tex><p>Lazzarini then published a <a href="https://books.google.com/books?id=n3FVAAAAYAAJ&amp;pg=RA1-PA140#v=onepage&amp;q&amp;f=false">paper</a> with this result, triumphantly showing the efficacy of this method. He had (most likely knowingly) forged the experiment. He specifically chose a number of needle droppings that would produce the 355/113 approximation, and he doesn’t provide any estimates of measurement error for the length of l and d. Professor Lee Badger’s excellent <em>Mathematics</em> <em>Magazine</em> article “<a href="https://www.jstor.org/stable/2690682">Lazzarini’s Lucky Approximation of pi</a>” goes into more detail about Lazzarini’s hoax. </p><hr/><h2>Footnotes</h2><ol class="footnotes"><li id="fn1">You may have encountered this problem on the YouTube channels <a href="https://www.youtube.com/watch?v=sJVivjuMfWA">Numberphile</a> or <a href="https://www.youtube.com/watch?v=szUH1rzwbAw">Mind Your Decisions</a>, or in the highly recommended <a href="https://en.wikipedia.org/wiki/Proofs_from_THE_BOOK">Proofs from THE BOOK</a>.<a class="footnote-backref" href="#fnref1">↩︎</a></li><li id="fn2">Additivity is sufficient to prove homogeneity over the rationals, that is, qE(l) = E(ql) for rational q. With monotonicity, you get homogeneity over the reals. Additivity and homogeneity prove linearity.<a class="footnote-backref" href="#fnref2">↩︎</a></li><li id="fn3">In particular, this is a Monte Carlo simulation.<a class="footnote-backref" href="#fnref3">↩︎</a></li><li id="fn4">Not as much as <a href="https://en.wikipedia.org/wiki/William_Shanks">William Shanks</a>, who spent 20 years calculating 707 decimal places of pi.<a class="footnote-backref" href="#fnref4">↩︎</a></li></ol>
+<p>Is this method of estimating pi any good? No, not really--much better methods of estimating pi exist. The expected
+  value of this estimator is exactly pi, but its variance (the calculation of which I’ll leave as an exercise for the
+  reader) is quite high, leaving much to be desired. Never mind the fact that we can calculate digits of pi directly.
+</p>
+<p>We can improve this estimator, however, by incorporating a little bit of <em>a priori </em>knowledge. It is well
+  known that 355/113 is a good approximation of pi (accurate to six decimal places). For a bit of fun, try setting the
+  number of needles to 355, and see if you can get 113 crossings. If you were open to a bit of deceit, you could use
+  this experimental result to exaggerate the efficacy of this method of estimating pi. Surely no one would do such a
+  thing!</p>
+<h2>Historical Hogwash</h2>
+<p>Academic fraud, despite being ever more relevant, is not a problem of the mere present. In the early 20th century,
+  the Italian mathematician Mario Lazzarini claimed to have physically set up the Buffon’s Needle Problem experiment
+  with l = 2.5 cm, d = 3 cm, and the number of needle droppings = 3408. He counted 1808 crossings, thus giving the
+  approximation:</p><!-- TeX: pi \approx 2l(num needles) / d(num crossings) = 2 * 2.5 * 3408 / 3 * 1808 = 355/113 -->
+  <tex display>pi \approx \frac{2l(\text{\# needles})}{d(\text{\# crossings})} = \frac{2 \times 2.5 \times 3408}{3 \times 1808} = \frac{355}{113} = 3.1415929...</tex>
+<p>Lazzarini then published a <a
+    href="https://books.google.com/books?id=n3FVAAAAYAAJ&amp;pg=RA1-PA140#v=onepage&amp;q&amp;f=false">paper</a> with
+  this result, triumphantly showing the efficacy of this method. He had forged the experiment. He deliberately chose a
+  number of needle droppings that would produce the 355/113 approximation. Furthermore, he doesn’t provide any estimates
+  of measurement error for the length of l and d, which is relevant since a tiny physical measurement error could reduce
+  the accuracy of the pi estimation by multiple decimal places. Professor Lee Badger’s excellent <em>Mathematics</em>
+  <em>Magazine</em> article “<a href="https://www.jstor.org/stable/2690682">Lazzarini’s Lucky Approximation of pi</a>”
+  goes into more detail about Lazzarini’s hoax. </p>
+<hr />
+<h2>Footnotes</h2>
+<ol class="footnotes">
+  <li id="fn1">You may have encountered this problem on the YouTube channels <a
+      href="https://www.youtube.com/watch?v=sJVivjuMfWA">Numberphile</a> or <a
+      href="https://www.youtube.com/watch?v=szUH1rzwbAw">Mind Your Decisions</a>, or in the highly recommended <a
+      href="https://en.wikipedia.org/wiki/Proofs_from_THE_BOOK">Proofs from THE BOOK</a>.<a class="footnote-backref"
+      href="#fnref1">↩︎</a></li>
+  <li id="fn2">Additivity is sufficient to prove homogeneity over the rationals, that is, qE(l) = E(ql) for rational q.
+    With monotonicity, you get homogeneity over the reals. Additivity and homogeneity prove linearity.<a
+      class="footnote-backref" href="#fnref2">↩︎</a></li>
+  <li id="fn3">In particular, this is a <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">Monte Carlo
+      simulation</a>.<a class="footnote-backref" href="#fnref3">↩︎</a></li>
+  <li id="fn4">Perhaps not as much as <a href="https://en.wikipedia.org/wiki/William_Shanks">William Shanks</a>, who
+    spent 20 years calculating 707 decimal places of pi.<a class="footnote-backref" href="#fnref4">↩︎</a></li>
+</ol>

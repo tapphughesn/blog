@@ -1,1 +1,110 @@
-<p>So… what’s the solution? What’s the probability that a needle comes to intersect one of the lines on the floor? If you are inclined to independently pursue the answer to this question, please do so now. Otherwise, read on for the result.</p><h2>The Solution</h2><p>The probability <em>p</em> that a needle of length <em>l</em> will come to intersect a line between planks of width <em>d</em> is:</p><!-- TeX: formula for p, 2 times l over pi d --><tex display>TODO</tex><p>And now, I’m going to quote my mother, right after I showed her this result:</p><p class="blog-post-quote">Why Pi?!?!</p><p>Indeed! Why Pi? And also, why is the result so delightfully simple? I mean, come on. No path integrals or infinite series? Not even a logarithm? Well my friend, you’ll be delighted to know that this lovely little result has an elegant proof to go with it. Gear up for a bit of mathematical thinking--this is the best part!</p><h2>The Proof </h2><p>First let’s observe that, if we fix <em>d</em>, the number of crossings depends entirely on <em>l</em>--there are no other variables that influence the probability of a crossing. Let E(<em>l</em>) be the number of crossings we expect to get from dropping one needle of length <em>l</em>. We want to find the formula for E(<em>l</em>), expressed in terms of <em>l</em> and the (fixed) <em>d</em>.</p><h3>Linearity of E(<em>l</em>)</h3><p>Now let’s consider two needles, one of length <em>l<sub>1</sub></em> and another of length <em>l<sub>2</sub></em>, and let’s impose that the needles are arranged so that the head of the second needle is attached to the tail of the first needle, and both needles are pointed in the same direction:</p><p><img src="/blog-images/1f688a04610e71e3.png"/></p><p>In this case, the positions of the needles are <em>dependent</em>--knowing the position of one of the needles gives us information about the position of the other.</p><p>What’s the expected number of crossings produced by both of these needles? According to the <a href="https://web.stanford.edu/class/archive/cs/cs109/cs109.1218/files/student_drive/3.2.pdf">linearity of expectation</a>, we can simply sum the expected number of crossings of each of the needles. The fact that the needles are dependent upon one another doesn’t matter.</p><!-- TeX: Expected number of crossings = E(l_1) + E(l_2) --><tex display>TODO</tex><p>We can also see that dropping these two needles will produce the same number of crossings as dropping a needle of length 2<em>l</em>, since the two situations are equivalent. So we have</p><!-- TeX: Expected number of crossings = E(l_1 + l_2) --><tex display>TODO</tex><p>Combining these two results, we have the additivity property:</p><!-- TeX: E(l_1) + E(l_2) = E(l_1 + l_2) --><tex display>TODO</tex><p>We also clearly have monotonicity: A longer needle is expected to produce more crossings than a shorter needle:</p><!-- TeX: l_1 > l_2 => E(l_1) > E(l_2) --><tex display>TODO</tex><p>These two properties together, additivity and monotonicity, are sufficient to prove that E(<em>l</em>) is linear<sup class="footnote-ref" id="fnref2"><a href="#fn2">2</a></sup>, that is:</p><!-- TeX: E(l) = cl for some c --><tex display>TODO</tex><p>All that remains is to find our constant <em>c</em>!</p><h3>Polygonal Needles</h3><p>In the last section, we considered two needles that were arranged in a line, head-to-tail, and stated that the expected number of crossings of this couple of needles was equal to the sum of the expected number of crossings of each of its constituent needles. That same argument holds for any arrangement of the constituent needles--it doesn’t matter <em>how</em> the positions of needles are dependent upon one another. So, these two needle couples both have the same expected number of crossings:</p><p><img src="/blog-images/4d2c7bb504d20a2e.png"/></p><p>Both of these needles have an expected number of crossings 2E(<em>l</em>) = E(2<em>l</em>) = 2<em>cl</em>. </p><p>The same argument holds for a complex of needles consisting of more than two segments. In particular, a polygonal needle made of <em>n</em> segments of length <em>l</em> will have an expected number of crossings <em>cnl</em>.</p><p><img src="/blog-images/55b89eeafc2ac4d8.png"/></p><h3>Determining <em>c</em></h3><p>Consider a circular needle with diameter <em>d</em>:</p><p><img src="/blog-images/51b061f683a82e6f.png"/></p><p>This circular needle always has two crossings.</p><p>Consider two regular n-gon needles, <em>P<sub>n</sub></em> and <em>P<sup>n</sup></em>, which inscribe and circumscribe the circular needle.</p><p><img src="/blog-images/8f35ec423a270d3a.png"/></p><p>If one of our straight lines (the lines between the wooden strips on the floor) crosses <em>P<sub>n</sub></em>, then it must also cross the circular needle. The converse is not necessarily true--there may be a straight line that crosses the circle but does not cross <em>P<sub>n</sub></em>. So, the expected number of crossings of <em>P<sub>n</sub></em> must be less than or equal to 2. Denoting the length of <em>P<sub>n</sub></em> as <em>l</em>(<em>P<sub>n</sub></em>), we can write:</p><!-- TeX: E(l(P_n)) = cl(P_n) <= 2 --><tex display>TODO</tex><p>Similarly, any crossing through the circle must also cross through <em>P<sup>n</sup></em>, so:</p><!-- TeX: 2 <= E(l(P^n)) = cl(P^n) --><tex display>TODO</tex><p>Combining these results, we have:</p><!-- TeX: cl(P_n) <= 2 <= cl(P^n) --><tex display>TODO</tex><p>Now consider what happens in the limit as <em>n</em> goes to infinity. Both <em>P<sub>n</sub></em> and <em>P<sup>n</sup></em> approach the circle. In particular, we have:</p><!-- TeX: limit of the the length of P_n and P^n goes to d*pi --><tex display>TODO</tex><p>Combining this with the prior inequality, we have:</p><!-- TeX: cdpi <= 2 <= cdpi --><tex display>TODO</tex><p>Since the left and right sides are the same, we must have strict equality (=) rather than inequality (&lt;=)! So:</p><!-- TeX: cdpi = 2; c = 2/dpi --><tex display>TODO</tex><p>Plugging this back into our equation for E(<em>l</em>):</p><!-- TeX: E(l) = cl = 2l/dpi --><tex display>TODO</tex><p>Finally, recall that this is the <em>short needle case</em>, that is, <em>l</em> &lt;= <em>d</em>. So, the number of crossings can be either 1 or 0 (the case where a needle falls exactly perpendicular to the straight lines and spans the width of the wooden strip has probability zero). Therefore, the probability that a needle will cross a line is the same as the expected number of crossings, that is, p = E(<em>l</em>).  We’ve done it!</p><h2>Empirical Support</h2><p>Does this result actually work in practice? Yes. But don’t just take my word for it; try it out yourself! Here’s an interactive simulation<sup class="footnote-ref" id="fnref3"><a href="#fn3">3</a></sup> where you can set the number of needles and the length of the needles. We can empirically observe that the formula predicts the number of crossings:</p>
+<p>So… what’s the solution? What’s the probability that a needle comes to intersect one of the lines on the floor? If
+  you are inclined to independently pursue the answer to this question, please do so now. Otherwise, read on for the
+  result.</p>
+<h2>The Solution</h2>
+<p>The probability <em>p</em> that a needle of length <em>l</em> will come to intersect a line between planks of width
+<em>d</em> is:</p><!-- TeX: formula for p, 2 times l over pi d --><tex display>p = \frac{2 l}{\pi d}</tex>
+<p>And now, I’m going to quote my mother, right after I showed her this result:</p>
+<p class="blog-post-quote">Why pi?!</p>
+<p>Indeed! Why pi? And also, why is the result so delightfully simple? I mean, come on. No path integrals or infinite
+  series? Not even a logarithm? Well, my friend, you’ll be delighted to know that this lovely result has an elegant
+  proof to go with it. Gear up for a bit of mathematical thinking--this is the best part!</p>
+<h2>The Proof </h2>
+<p>First let’s observe that, if we fix <em>d</em>, the number of crossings depends entirely on <em>l</em>--there are no
+  other variables that influence the probability of a crossing. Let E(<em>l</em>) be the number of crossings we expect
+  to get from dropping one needle of length <em>l</em>. E(<em>l</em>) is an <a
+    href="https://en.wikipedia.org/wiki/Expected_value">expected value</a>, which is formally defined in probability
+  theory--in basic terms, it is the average outcome of some random process, for example, the expected value of rolling a six-sided die is 3.5. We want to find
+  the formula for E(<em>l</em>), expressed in terms of <em>l</em> and the (fixed) <em>d</em>.</p>
+<h3>Linearity of E(<em>l</em>)</h3>
+<p>The first step of the proof is to show that E(<em>l</em>) is linear. E(<em>l</em>) is linear if it has two
+  properties: monotonicity and additivity. Monotonicity, the property that E(<em>l</em>) increases as <em>l</em>
+  increases, is the easy one--of course a longer needle has a higher chance of producing a crossing than a short needle!
+  Additivity is the harder part. For two needles of lengths <em>l<sub>1</sub></em> and <em>l<sub>2</sub></em>, we need
+  to show:</p><!-- TeX: E(l1+ l2) = E(l_1) + E(l_2) -->
+<tex display>E(l_1 + l_2) = E(l_1) + E(l_2)</tex>
+<p>That is, dropping two needles independently is expected to produce the same number of crossings as dropping one
+  needle with the combined length of the two. </p>
+<p>Let’s first consider the case where we impose the requirement that the needles are arranged so that the head of the
+  second needle is attached to the tail of the first needle, and both needles are pointed in the same direction:</p>
+<p><img src="/blog-images/e4b7cf1acbc2d4c1.png" /></p>
+<p>The two needles taken together constitute a larger needle of length <em>l<sub>1</sub> + l<sub>2</sub></em>. The
+  additivity property obviously holds true in this case, since any crossing in the larger needle must be attributed to a
+  crossing in one of the constituent needles, so the expected number of crossings produced by the larger needle is the
+  sum of the expected number of crossings for each constituent needle. </p>
+<p>In this case, the needle droppings are not independent--the position of one needle depends on the position of the
+  other. Does the additivity property still hold true if the needle droppings are independent? As it turns out, yes! I
+  won’t formally justify this here, but I can give you some intuition for why this is true. For the two independent
+  needle droppings, you may get 2 crossings, and the long (dependent) needle will only produce at most 1 crossing
+  (assuming <em>l<sub>1</sub> + l<sub>2</sub> ≤ d</em>). However, the long needle is less likely to get 0 crossings. If
+  one constituent needle does not produce a crossing, the other constituent needle has a marginally higher probability
+  of producing a crossing, since the first needle “ruled out” some blank space. These two properties of the long needle
+  (can’t get 2 crossings; less likely to get 0 crossings) “average out,” leaving the overall expectation of the number
+  of crossings unchanged. In fact, this is true no matter <em>how</em> the needles are dependent on one another--they
+  don’t have to be arranged in a line. If you want a more formal proof of this, check out <a
+    href="https://web.stanford.edu/class/archive/cs/cs109/cs109.1218/files/student_drive/3.2.pdf">the linearity of
+    expectation theorem</a>.</p>
+<p>So, if we accept that the expected number of crossings will be the same whether or not the two needle droppings are
+  independent, then we have the additivity property:</p><!-- TeX: E(l1+ l2) = E(l_1) + E(l_2) -->
+<tex display>E(l_1 + l_2) = E(l_1) + E(l_2)</tex>
+<p>These two properties together, monotonicity and additivity, are sufficient to show that E(<em>l</em>) is linear<sup
+    class="footnote-ref" id="fnref2"><a href="#fn2">2</a></sup>, that is:</p><!-- TeX: E(l) = cl for some c -->
+  <tex display>E(l) = cl, \text{for some constant }c</tex>
+<p>All that remains is to find our constant <em>c</em>! </p>
+<h3>Polygonal Needles</h3>
+<p>Before we determine <em>c</em>, let’s take a small detour to talk about polygonal needles--complexes of needles that
+  are arranged head-to-tail. In the last section, we found that the expected number of crossings produced by dropping
+  two needles will be the sum of the expected number of crossings for each of the needles, and it doesn’t matter if the
+  needle positions depend on each other or how they depend on each other. So, both of these two needles, each composed
+  of two constituent needles, have the same expected number of crossings:</p>
+<p><img src="/blog-images/7aeb4218302656a4.png" /></p>
+<p>The expected number of crossings for either of these needles is 2E(<em>l</em>) = E(2<em>l</em>) = 2<em>cl</em>. The
+  bent needle is more likely to produce 0 or 2 crossings, while the straight needle is more likely to produce 1
+  crossing, and the average number of crossings is the same.</p>
+<p>The same argument holds for a complex of needles consisting of more than two segments. In particular, a polygonal
+  needle made of <em>n</em> segments of length <em>l</em> will have an expected number of crossings <em>cnl</em>, since
+  the total length of the needle is <em>nl</em>.</p>
+<p><img src="/blog-images/55b89eeafc2ac4d8.png" /></p>
+<h3>Determining <em>c</em></h3>
+<p>Finally, we will determine <em>c</em>, and find our formula for E(<em>l</em>). Consider a circular needle with
+  diameter <em>d</em>:</p>
+<p><img src="/blog-images/d683daa33ff82e33.png" /></p>
+<p>Since its diameter is the same as the width of the wooden strips, the circular needle always has two crossings no
+  matter where it lands, as shown in the figure above.</p>
+<p>Now, consider two regular <em>n</em>-gon (a regular polygon with <em>n</em> sides) needles, <em>P<sub>n</sub></em>
+  and <em>P<sup>n</sup></em>, which inscribe and circumscribe the circular needle. Here’s what that looks like for
+  <em>n</em> = 7:</p>
+<p><img src="/blog-images/8f35ec423a270d3a.png" /></p>
+<p>If one of our straight lines (the lines between the wooden strips on the floor) crosses <em>P<sub>n</sub></em>, then
+  it must also cross the circular needle. The converse is not necessarily true--there may be a straight line that
+  crosses the circle but does not cross <em>P<sub>n</sub></em>. So, the expected number of crossings of
+  <em>P<sub>n</sub></em> must be less than or equal to 2, the number of crossings of the circle. Denoting the length of
+  <em>P<sub>n</sub></em> as <em>l</em>(<em>P<sub>n</sub></em>), we can write:</p><!-- TeX: E(l(P_n)) = cl(P_n) <= 2 -->
+<tex display>E(l(P_n)) = cl(P_n) \le 2</tex>
+<p>Similarly, any crossing through the circle must also cross through <em>P<sup>n</sup></em>, so:</p>
+<!-- TeX: 2 <= E(l(P^n)) = cl(P^n) -->
+<tex display>2 \le E(l(P^n)) = cl(P^n)</tex>
+<p>Combining these results, we have:</p><!-- TeX: cl(P_n) <= 2 <= cl(P^n) -->
+<tex display>cl(P_n) \le 2 \le cl(P^n)</tex>
+<p>Now consider what happens in the limit as <em>n</em> goes to infinity. Both <em>P<sub>n</sub></em> and
+  <em>P<sup>n</sup></em> get closer and closer to the circle, so their lengths approach the circumference of the circle.
+  We have:</p><!-- TeX: limit of the length of P_n and P^n goes to d*pi -->
+  <tex display>\lim_{n \to \infty}l(P_n) = \lim_{n \to \infty}l(P^n) = d \pi</tex>
+<p>There’s our pi! Combining this with the prior inequality, we have:</p><!-- TeX: cdpi <= 2 <= cdpi -->
+<tex display>cd \pi \le 2 \le cd \pi</tex>
+<p>Since the left and right sides are the same, we must have strict equality (=), not inequality (≤)! So:</p>
+<!-- TeX: cdpi = 2; c = 2/dpi -->
+<tex display>cd \pi =2</tex>
+<tex display>c = \frac{2}{d \pi}</tex>
+<p>Plugging this back into our equation for E(<em>l</em>):</p><!-- TeX: E(l) = cl = 2l/dpi -->
+<tex display>E(l) = cl = \frac{2l}{d \pi}</tex>
+<p>Finally, recall that this is the <em>short needle case</em>, that is, <em>l</em> ≤ <em>d</em>. So, the number of
+  crossings can be either 1 or 0 (the case where a needle falls exactly perpendicular to the straight lines and spans
+  the width of the wooden strip has probability zero). So, the probability that a needle will cross a line is
+  the same as the expected number of crossings, that is, p = E(<em>l</em>). We’ve done it!</p>
+<h2>Empirical Support</h2>
+<p>Does this result actually work in practice? If we dropped a bunch of needles on a floor of wooden strips, would we
+  actually measure the expected number of crossings (or something close to it)? Yes. But don’t just take my word for it;
+  try it out yourself! Here’s an interactive simulation<sup class="footnote-ref" id="fnref3"><a href="#fn3">3</a></sup>
+  where you can set the number of needles and the length of the needles. We can empirically observe that the formula
+  predicts the number of crossings:</p>
