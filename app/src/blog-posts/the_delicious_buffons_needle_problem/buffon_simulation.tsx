@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useLayoutEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 600;
@@ -39,31 +39,13 @@ interface Props {
 
 export default function buffon_simulation({ show_controls = true, show_readout = true, show_pi_estimation = true }: Props = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const outerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(10);
   const [lengthRatio, setLengthRatio] = useState(show_controls ? 0.5 : 2 / 3);
   const [stats, setStats] = useState<SimStats | null>(null);
-  const [scale, setScale] = useState(1);
-  const [innerHeight, setInnerHeight] = useState(0);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx) drawBackground(ctx);
-  }, []);
-
-  useLayoutEffect(() => {
-    const widthObserver = new ResizeObserver(() => {
-      if (!outerRef.current) return;
-      setScale(Math.min(1, outerRef.current.offsetWidth / CANVAS_WIDTH));
-    });
-    const heightObserver = new ResizeObserver(() => {
-      if (!innerRef.current) return;
-      setInnerHeight(innerRef.current.offsetHeight);
-    });
-    if (outerRef.current) widthObserver.observe(outerRef.current);
-    if (innerRef.current) heightObserver.observe(innerRef.current);
-    return () => { widthObserver.disconnect(); heightObserver.disconnect(); };
   }, []);
 
   const handleDrop = () => {
@@ -93,8 +75,7 @@ export default function buffon_simulation({ show_controls = true, show_readout =
   };
 
   return (
-    <div ref={outerRef} style={{ width: '100%', height: innerHeight * scale, overflow: 'hidden' }}>
-    <div ref={innerRef} className="blog-post-interactive-component" style={{ width: CANVAS_WIDTH, transform: `scale(${scale})`, transformOrigin: 'top left' }}>
+    <div className="blog-post-interactive-component">
       <div className="blog-post-interactive-component__controls">
         {show_controls && <>
           <label className="blog-post-interactive-component__label">
@@ -144,7 +125,6 @@ export default function buffon_simulation({ show_controls = true, show_readout =
           </table>
         );
       })()}
-    </div>
     </div>
   );
 }

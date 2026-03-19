@@ -11,11 +11,15 @@
   height: 100%
 }
 
-html,
-body {
+html {
   height: 100%;
   margin: 0;
   overflow-x: hidden;
+}
+
+body {
+  height: 100%;
+  margin: 0;
 }
 
 .routed-content {
@@ -113,11 +117,17 @@ body {
   align-items: center;
 }
 
+.blog-post-interactive-component canvas {
+  max-width: 100%;
+  height: auto;
+}
+
 .blog-post-interactive-component__controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   margin-bottom: 0.5rem;
 }
 
@@ -152,7 +162,8 @@ body {
 }
 
 .blog-post-interactive-component__stats {
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   margin-top: 1rem;
   border-collapse: collapse;
   font-family: Georgia, serif;
