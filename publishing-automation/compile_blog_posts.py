@@ -8,6 +8,7 @@ import re
 import sys
 
 from bs4 import BeautifulSoup, Comment, NavigableString, Tag
+from PIL import Image
 from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -70,17 +71,13 @@ def make_image_handler(images_dir: Path):
         with image.open() as f:
             data = f.read()
 
-        ext = image.content_type.split(";")[0].strip().split("/")[-1]
-        if ext == "jpeg":
-            ext = "jpg"
-
         digest = hashlib.sha256(data).hexdigest()[:16]
-        filename = f"{digest}.{ext}"
+        filename = f"{digest}.webp"
         dest = os.path.join(images_dir, filename)
 
         if not os.path.exists(dest):
-            with open(dest, "wb") as out:
-                out.write(data)
+            img = Image.open(io.BytesIO(data))
+            img.save(dest, "webp")
 
         return {"src": f"/blog-images/{filename}"}
 

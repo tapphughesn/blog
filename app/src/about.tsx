@@ -19,7 +19,7 @@ const LeftContent = () => {
   return (
     <aside className="pane left">
       <img
-        src="/front_portrait_downscaled.jpg"
+        src="/front_portrait_downscaled.webp"
         alt="Headshot picture of Nick Tapp-Hughes"
         className="left-portrait"
       />
