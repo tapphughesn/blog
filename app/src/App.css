@@ -52,12 +52,12 @@ body {
 
 .blog-list {
   text-align: left;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #d4cfc9;
   margin-top: 2rem;
 }
 
 .blog-listing {
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #d4cfc9;
   padding-bottom: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -173,7 +173,7 @@ body {
 
 .blog-post-interactive-component__stats td {
   padding: 0.25rem 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #d4cfc9;
 }
 
 .blog-post-interactive-component__stats td:first-child {
@@ -193,7 +193,7 @@ body {
 
 .blog-post hr {
   border: none;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #d4cfc9;
   height: 0;
   margin: 1rem;
 }
@@ -266,7 +266,7 @@ body {
 .publications-header {
   font-size: 20px;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #d4cfc9;
   text-align: center;
 }
 
@@ -343,7 +343,7 @@ body {
 }
 
 .nav--scrolled {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(248, 247, 244, 0.95);
   backdrop-filter: blur(6px);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -416,8 +416,7 @@ body {
 }
 
 .nav__link:hover {
-  color: #2563eb;
-  background: #eff6ff;
+  color: #1d4ed8;
 }
 
 /* Mobile button */
@@ -475,7 +474,7 @@ body {
 
 .nav__mobile-links {
   padding: 0.5rem 0.5rem 0.75rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #d4cfc9;
 }
 
 .nav__mobile-link {
@@ -490,8 +489,7 @@ body {
 }
 
 .nav__mobile-link:hover {
-  color: #2563eb;
-  background: #eff6ff;
+  color: #1d4ed8;
 }
 
 /* #endregion */
@@ -520,7 +518,7 @@ body {
 /* Left pane */
 .left {
   flex: 0 0 280px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #d4cfc9;
 }
 
 .left-portrait {
@@ -559,7 +557,7 @@ body {
     width: 280px;
     height: 100%;
 
-    border-right: 1px solid #e5e7eb;
+    border-right: 1px solid #d4cfc9;
     /* subtle grey */
     padding-right: 2rem;
     padding-left: 0;
@@ -601,7 +599,7 @@ body {
   padding-top: 1rem;
   margin-top: 2rem;
   color: #111827;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #d4cfc9;
   /* subtle grey */
 }
 
