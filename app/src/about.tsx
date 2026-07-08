@@ -88,7 +88,7 @@ const RightContent = () => {
         What I'm Doing Now
       </h1>
       <p className="main-paragraph">
-        In July, I left my role as a software developer at <a href="https://www.epic.com/">Epic</a>. Since then, I've been traveling in Europe and the US, publishing scientific papers, building this website, writing blog posts, meeting with my mentors, and working on projects. I'm looking for new opportunities! Would you like to contact me? Feel free to reach out.
+        As of July 2026, I'm working as a software development engineer on the Health team at <a href="https://www.whoop.com/">WHOOP</a>. Previously, I worked as a software developer at <a href="https://www.epic.com/">Epic</a>. Before that, I was a graduate researcher at the UNC-Chapel Hill Department of Computer Science. I'm always open to new opportunities--feel free to reach out!
       </p>
     </div>
   )
