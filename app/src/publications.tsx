@@ -28,6 +28,14 @@ function Publications() {
         <li>
           Sarah D. Mills, <strong>Nicholas Tapp-Hughes</strong>, Yu Zhang, Kurt M. Ribisl, Christopher A. Wiesen, Kristen Hassmiller Lich,
           <br />
+          "The Impact of a Menthol Cigarette Ban on Tobacco Use, Lung Cancer, and Life Expectancy,"
+          <br />
+          Nicotine & Tobacco Research. Available: <a href="https://academic.oup.com/ntr/advance-article/doi/10.1093/ntr/ntag157/8728383">https://academic.oup.com/ntr/advance-article/doi/10.1093/ntr/ntag157/8728383</a>
+        </li>
+
+        <li>
+          Sarah D. Mills, <strong>Nicholas Tapp-Hughes</strong>, Yu Zhang, Kurt M. Ribisl, Christopher A. Wiesen, Kristen Hassmiller Lich,
+          <br />
           "The impact of a menthol cigarette ban on tobacco use, lung cancer, and life expectancy,"
           <br />
           Poster presentation at the annual meeting of the Society of Research on Nicotine or Tobacco, Baltimore, MD (2026 March).
