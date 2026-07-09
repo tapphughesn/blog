@@ -18,8 +18,9 @@ const schema = a.schema({
       index("verificationToken")
         .name("ByVerificationToken") 
         .queryField("listSubscribersByToken") 
-    ]),
+    ])
     // .authorization((allow) => [allow.publicApiKey()]),
+    .authorization((allow) => [allow.guest()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -27,6 +28,6 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "iam",
+    defaultAuthorizationMode: "identityPool",
   },
 });
