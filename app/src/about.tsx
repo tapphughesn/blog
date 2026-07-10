@@ -103,7 +103,7 @@ const Contact = () => {
       <div className="contact-section__item">
         <img src={emailUrl} alt="Email Icon" className="contact-icon" />
         <span className="email-text">
-          nicholas(dot)tapphughes(at)gmail(dot)com
+          nicholas.tapphughes@gmail.com
         </span>
       </div>
 
@@ -120,7 +120,7 @@ const Contact = () => {
         <span className="separator">|</span>
         <img src={linkedinUrl} alt="LinkedIn Icon" className="contact-icon" />
         <a
-          href="https://www.linkedin.com/in/nicholas-tapp-hughes-b75641142/"
+          href="https://www.linkedin.com/in/nicholas-tapp-hughes/"
           target="_blank"
           rel="noopener noreferrer"
           className="contact-section__link"
