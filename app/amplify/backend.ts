@@ -18,6 +18,11 @@ const backend = defineBackend({
   blogNotifier,
 });
 
+// Temporary API key rotation
+backend.data.resources.cfnResources.cfnApiKey?.overrideLogicalId(
+  'RecoverApiKey20260709'
+);
+
 // -------------------------
 // subscriberHandler Lambda
 // -------------------------
